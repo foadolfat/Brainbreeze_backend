@@ -1,0 +1,27 @@
+{
+  "name": "nerd",
+  "version": "1.0.0",
+  "description": "backend for nerdjs project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NerdJS-Project/Back-End.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NerdJS-Project/Back-End/issues"
+  },
+  "homepage": "https://github.com/NerdJS-Project/Back-End#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
