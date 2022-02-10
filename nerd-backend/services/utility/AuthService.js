@@ -39,12 +39,12 @@ async function authenticate(req, res, next){
 };
 
 function encrypt(req, res, next){
-    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+    bcrypt.hash(req.body.user_password, saltRounds, function(err, hash) {
         if(err) {
             res.status(500).send("Internal Error");
             throw err;
         }
-        req.body.password = hash;
+        req.body.user_password = hash;
         next();
     });
 };

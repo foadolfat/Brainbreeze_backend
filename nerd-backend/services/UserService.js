@@ -1,17 +1,19 @@
 /**
  * @typedef {Object} User
  * @property {number} user_id
- * @property {string} name
- * @property {string} email
- * @property {string} password
+ * @property {string} user_name
+ * @property {string} user_email
+ * @property {string} user_password
+ * @property {string} user_type
  */
 
 /**
  * @typedef {Object} UserDTO
  * @property {number} user_id
- * @property {string} name
- * @property {string} email
- * @property {string} password
+ * @property {string} user_name
+ * @property {string} user_email
+ * @property {string} user_password
+ * @property {string} user_type
  */
 
  const BaseService = require("./utility/BaseService");

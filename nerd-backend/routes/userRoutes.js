@@ -53,10 +53,10 @@ router
                     .status(200)
                     .json(
                         {
-                            id:user.id,
-                            email:user.email,
-                            name:user.name,
-                            created_at:user.created_at
+                            user_id:user.user_id,
+                            user_email:user.user_email,
+                            user_name:user.user_name,
+                            user_type:user.user_type
                         }
                     );
             }
@@ -74,7 +74,7 @@ router
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.id = req.params.id;
+        req.body.user_id = req.params.id;
         try{
             
             const { payload: message, error } = await userService.updateUser(req.body);
@@ -100,7 +100,7 @@ router
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.id = req.params.id;
+        req.body.user_id = req.params.id;
         try{
             
             const { payload: message, error } = await userService.deleteUser(req.body);
