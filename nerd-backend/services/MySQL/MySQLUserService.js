@@ -22,8 +22,8 @@ class MySQLUserService extends UserService {
     async createUser(userDTO) {
         const createUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO users (name, email, password) VALUES(?,?,?);",
-                values:[userDTO.name, userDTO.email, userDTO.password]
+                sql: "INSERT INTO user_table (user_id, user_name, user_email, user_password, user_type) VALUES(?,?,?,?,?);",
+                values:[userDTO.user_id, userDTO.user_name, userDTO.user_email, userDTO.user_password, userDTO.user_type]
             },
             (err, results) => {
                 if(err) {
@@ -52,8 +52,9 @@ class MySQLUserService extends UserService {
          */
         const getUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT *, CAST(password as CHAR) as password FROM users WHERE id=? OR email=?;",
-                values: [userDTO.id, userDTO.email]
+			/* maybe change this later*/ 
+                sql:"SELECT *, CAST(user_password as CHAR) as user_password FROM user_table WHERE user_id=? OR user_email=?;",
+                values: [userDTO.user_id, userDTO.user_email]
             }, (err, results) => {
                 
                 if(err){
@@ -85,8 +86,9 @@ class MySQLUserService extends UserService {
     async updateUser(userDTO) {
         const updateUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE users SET name=? WHERE id=?;",
-                values:[userDTO.name, userDTO.id]
+                /* change password and type */
+                sql: "UPDATE user_table SET user_name=? WHERE user_id=?;",
+                values:[userDTO.user_name, userDTO.user_id]
             },
             (err, results) => {
                 
@@ -114,8 +116,8 @@ class MySQLUserService extends UserService {
     async deleteUser(userDTO) {
         const deleteUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM users WHERE id=?;",
-                values:[userDTO.id]
+                sql: "DELETE FROM user_table WHERE user_id=?;",
+                values:[userDTO.user_id]
             },
             (err, results) => {
                 
