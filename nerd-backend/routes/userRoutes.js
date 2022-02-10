@@ -41,7 +41,7 @@ router
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.id = req.params.id;
+        req.body.user_id = req.params.id;
         try{
             
             const { payload: user, error } = await userService.getUser(req.body);
