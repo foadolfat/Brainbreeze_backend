@@ -1,9 +1,41 @@
 Create database if not exists nerdjs;
+use nerdjs;
 
-Create table if not exists users (
-  id serial primary key,
-  name varchar(255) not null,
-  email varchar(255) not null,
-  password BINARY(60) not null,
-  created_at timestamp default now()
+drop table lessons;
+drop table modules;
+drop table classes;
+drop table user_table;
+
+create table user_table 
+(
+    user_id INT NOT NULL PRIMARY KEY,
+    user_name VARCHAR(30) NOT NULL,
+    user_email VARCHAR(50),
+    user_password BINARY(60) NOT NULL,
+    user_type VARCHAR(30)
+);
+create table classes
+(
+    class_id INT PRIMARY KEY,
+    class_name VARCHAR(40) NOT NULL,
+    class_descrip VARCHAR(100),
+    user_class INT NOT NULL,
+   /* module_id INT REFERENCES modules(module_id),*/
+    foreign key (user_class) references user_table(user_id)
+);
+create table modules
+(
+  module_id INT PRIMARY KEY,
+  module_name VARCHAR(40) NOT NULL,
+  module_descrip VARCHAR(100),
+  class_id INT,
+  foreign key (class_id) references classes(class_id)
+); 
+create table lessons
+(
+  lessons_id INT PRIMARY KEY,
+  lesson_name VARCHAR(30),
+  lesson_descrip VARCHAR(100) ,
+   module_id INT,
+  foreign key (module_id) references modules(module_id)
 );
