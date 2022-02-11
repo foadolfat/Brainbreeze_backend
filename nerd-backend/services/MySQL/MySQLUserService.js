@@ -22,8 +22,8 @@ class MySQLUserService extends UserService {
     async createUser(userDTO) {
         const createUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO user_table (user_id, user_name, user_email, user_password, user_type) VALUES(?,?,?,?,?);",
-                values:[userDTO.user_id, userDTO.user_name, userDTO.user_email, userDTO.user_password, userDTO.user_type]
+                sql: "INSERT INTO user_table (user_name, user_email, user_password, user_type) VALUES(?,?,?,?);",
+                values:[userDTO.user_name, userDTO.user_email, userDTO.user_password, userDTO.user_type]
             },
             (err, results) => {
                 if(err) {
