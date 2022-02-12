@@ -17,36 +17,36 @@
  const BaseService = require("./utility/BaseService");
  const Result = require("./utility/Result").Result;
  
- class classesService extends BaseService{
+ class ClassService extends BaseService{
      
      /**
-      * @param {classesDTO} classesDTO
-      * @returns {Promise<Result<classes>>}
+      * @param {ClassDTO} classDTO
+      * @returns {Promise<Result<Class>>}
       */
-     createclasses(classesDTO) { }
+     createClass(classDTO) { }
 
 
      /**
-      * @param {number} classes_id
+      * @param {number} class_id
       * @returns {Promise<Result<boolean>>} 
       */
-     deleteclasses(classes_id) { }
+     deleteClass(class_id) { }
 
 
      /**
-      * @param {classesDTO} classesDTO
-      * @returns {Promise<Result<classes>>}
+      * @param {ClassDTO} classDTO
+      * @returns {Promise<Result<Class>>}
       */
-     updateclasses(classesDTO) { }
+     updateClass(classDTO) { }
  
 
      /**
-      * @param {classesDTO} classesDTO
-      * @returns {Promise<Result<classes>>}
+      * @param {ClassDTO} classDTO
+      * @returns {Promise<Result<Class>>}
       */
-     getclasses(classesDTO){ }
+     getClass(classDTO){ }
  
 
  };
  
- module.exports = classesService
+ module.exports = ClassService

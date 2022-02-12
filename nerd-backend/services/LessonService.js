@@ -1,14 +1,14 @@
 /**
- * @typedef {Object} lesson
- * @property {number} lesson_id
+ * @typedef {Object} Lesson
+ * @property {number} lessons_id
  * @property {string} lesson_name
  * @property {string} lessonsdescrip
  * @property {number} module_id
  */
 
 /**
- * @typedef {Object} lessonDTO
- * @property {number} lesson_id
+ * @typedef {Object} LessonDTO
+ * @property {number} lessons_id
  * @property {string} lesson_name
  * @property {string} lesson_descrip
  * @property {number} module_id
@@ -17,36 +17,36 @@
  const BaseService = require("./utility/BaseService");
  const Result = require("./utility/Result").Result;
  
- class lessonsService extends BaseService{
+ class LessonsService extends BaseService{
      
      /**
-      * @param {lessonsDTO} lessonsDTO
-      * @returns {Promise<Result<lessons>>}
+      * @param {LessonDTO} lessonDTO
+      * @returns {Promise<Result<Lesson>>}
       */
-     createlessons(lessonsDTO) { }
+     createLesson(lessonDTO) { }
 
 
      /**
-      * @param {number} lessons_id
+      * @param {number} lesson_id
       * @returns {Promise<Result<boolean>>} 
       */
-     deletelessons(lessons_id) { }
+     deleteLesson(lesson_id) { }
 
 
      /**
-      * @param {lessonsDTO} lessonsDTO
-      * @returns {Promise<Result<lessons>>}
+      * @param {LessonDTO} lessonDTO
+      * @returns {Promise<Result<Lesson>>}
       */
-     updatelessons(lessonsDTO) { }
+     updateLesson(lessonDTO) { }
  
 
      /**
-      * @param {lessonsDTO} lessonsDTO
-      * @returns {Promise<Result<lessons>>}
+      * @param {LessonDTO} lessonDTO
+      * @returns {Promise<Result<Lesson>>}
       */
-     getlessons(lessonsDTO){ }
+     getLesson(lessonDTO){ }
  
 
  };
  
- module.exports = lessonsService
+ module.exports = LessonsService

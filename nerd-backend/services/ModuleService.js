@@ -1,5 +1,5 @@
 /**
- * @typedef {Object} module
+ * @typedef {Object} Module
  * @property {number} module_id
  * @property {string} module_name
  * @property {string} module_descrip
@@ -7,7 +7,7 @@
  */
 
 /**
- * @typedef {Object} moduleDTO
+ * @typedef {Object} ModuleDTO
  * @property {number} module_id
  * @property {string} module_name
  * @property {string} module_descrip
@@ -17,36 +17,36 @@
  const BaseService = require("./utility/BaseService");
  const Result = require("./utility/Result").Result;
  
- class modulesService extends BaseService{
+ class ModuleService extends BaseService{
      
      /**
-      * @param {modulesDTO} modulesDTO
-      * @returns {Promise<Result<modules>>}
+      * @param {ModuleDTO} moduleDTO
+      * @returns {Promise<Result<Module>>}
       */
-     createmodules(modulesDTO) { }
+     createModule(moduleDTO) { }
 
 
      /**
-      * @param {number} modules_id
+      * @param {number} module_id
       * @returns {Promise<Result<boolean>>} 
       */
-     deletemodules(modules_id) { }
+     deleteModule(module_id) { }
 
 
      /**
-      * @param {modulesDTO} modulesDTO
-      * @returns {Promise<Result<modules>>}
+      * @param {ModuleDTO} moduleDTO
+      * @returns {Promise<Result<Module>>}
       */
-     updatemodules(modulesDTO) { }
+     updateModule(moduleDTO) { }
  
 
      /**
-      * @param {modulesDTO} modulesDTO
-      * @returns {Promise<Result<modules>>}
+      * @param {ModuleDTO} moduleDTO
+      * @returns {Promise<Result<Module>>}
       */
-     getmodules(modulesDTO){ }
+     getModule(moduleDTO){ }
  
 
  };
  
- module.exports = modulesService
+ module.exports = ModuleService

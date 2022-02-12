@@ -23,7 +23,7 @@ class MySQLClassService extends ClassService {
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql: "INSERT INTO classes (class_id, class_name, class_descrip, user_class) VALUES(?,?,?,?);",
-                values:[userDTO.class_id, userDTO.class_name, userDTO.class_descrip, userDTO.user_class]
+                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_class]
             },
             (err, results) => {
                 if(err) {
@@ -44,17 +44,17 @@ class MySQLClassService extends ClassService {
 
     /**
      * @param {import("../ClassService").ClassDTO} classDTO
-     * @returns {Promise<Result<import("../ClassService").User>>} 
+     * @returns {Promise<Result<import("../ClassService").Class>>} 
      */
     async getClass(classDTO){
         /**
-         * @type {Promise<import("../ClassService").User>}
+         * @type {Promise<import("../ClassService").Class>}
          */
         const getClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
 			/* maybe change this later*/ 
-                sql:"SELECT *, CAST(class_name as CHAR) as class_name FROM classes WHERE class_name=? ",
-                values: [userDTO.class_name]
+                sql:"SELECT * FROM classes WHERE class_id=? and user_class=?;",
+                values: [classDTO.class_id, classDTO.user_class]
             }, (err, results) => {
                 
                 if(err){
@@ -62,7 +62,7 @@ class MySQLClassService extends ClassService {
                 }
 
                 if(!results || results.length === 0){
-                    var err = new Error("User does not exist!");
+                    var err = new Error("Class does not exist!");
                     err.errno = 1404;
                     err.code = "NOT FOUND";
                     return reject(err);
@@ -72,7 +72,7 @@ class MySQLClassService extends ClassService {
         });
         try{
             const newClass = await getClassCMD;
-            return new Result(newUser, null);
+            return new Result(newClass, null);
 
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
@@ -86,8 +86,9 @@ class MySQLClassService extends ClassService {
     async updateClass(classDTO) {
         const updateClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE classes SET class_name=? WHERE class_id=?;",
-                values:[userDTO.class_name, userDTO.class_id]
+                // currently only updating class name
+                sql: "UPDATE classes SET class_name=? WHERE class_id=? and user_class=?;",
+                values:[classDTO.class_name, classDTO.class_id, classDTO.user_class]
             },
             (err, results) => {
                 
@@ -115,8 +116,8 @@ class MySQLClassService extends ClassService {
     async deleteClass(classDTO) {
         const deleteClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM classes WHERE class_id=?;",
-                values:[userDTO.class_id]
+                sql: "DELETE FROM classes WHERE class_id=? and user_class=?;",
+                values:[classDTO.class_id, classDTO.user_class]
             },
             (err, results) => {
                 
