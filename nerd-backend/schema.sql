@@ -30,7 +30,7 @@ create table modules
 ); 
 create table lessons
 (
-  lessons_id INT PRIMARY KEY,
+  lesson_id INT PRIMARY KEY,
   lesson_name VARCHAR(30),
   lesson_descrip VARCHAR(100) ,
   module_id INT REFERENCES modules(module_id)
