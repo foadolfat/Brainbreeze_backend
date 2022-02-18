@@ -1,5 +1,5 @@
 const { Result, IError } = require("../utility/Result");
-const Lessonservice = require("../LessonService");
+const LessonService = require("../LessonService");
 
 class MySQLLessonservice extends LessonService {
     /**
@@ -140,4 +140,4 @@ class MySQLLessonservice extends LessonService {
     }
 
 }
-lesson.exports = MySQLLessonservice;
+module.exports = MySQLLessonservice;
