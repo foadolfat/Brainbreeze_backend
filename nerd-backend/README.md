@@ -12,13 +12,13 @@
 ### POST
 - Creates new user
 /api/user
-body:
-{
-    "user_name": "string",
-    "user_password": "string",
-    "user_email": "string",
-    "user_type": "string",
-}
+body:</br>
+{</br>
+    "user_name": "string",</br>
+    "user_password": "string",</br>
+    "user_email": "string",</br>
+    "user_type": "string",</br>
+}</br>
 
 ### GET 
 - Retrieve user information such as email, type and name
