@@ -35,7 +35,32 @@ router
         
     })
 
-    .get("/api/user/:id", async(req, res) => {
+    .get("/api/user/signin", AuthService.authenticate, async(req, res) => {
+
+        if(!req.auth) {
+            res.status(400).json(
+                {
+                    message: "Invalid credentials"
+                }
+            );
+        } else {
+            res
+                .status(200)
+                .json(
+                    {
+                        auth:req.auth,
+                        token:req.token,
+                        user_email:req.user_email,
+                        user_name:req.user_name,
+                        user_type:req.user_type,
+                        user_id:req.user_id
+                    }
+                );
+        }
+
+    })
+
+    .get("/api/user/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}
@@ -44,7 +69,7 @@ router
         req.body.user_id = req.params.id;
         try{
             
-            const { payload: user, error } = await userService.getUser(req.body);
+            const { payload: user, error } = await userService.getUserById(req.body);
 
             if(error) {
                 res.status(400).json(error);
@@ -67,14 +92,13 @@ router
 
     })
 
-
-    .put("/api/user/:id", async(req, res) => {
+    .put("/api/user/update", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.params.id;
+        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.updateUser(req.body);
@@ -93,14 +117,13 @@ router
 
     })
 
-
-    .delete("/api/user/:id", async(req, res) => {
+    .delete("/api/user/remove/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.params.id;
+        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.deleteUser(req.body);

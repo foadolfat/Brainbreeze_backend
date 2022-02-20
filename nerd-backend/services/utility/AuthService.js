@@ -13,21 +13,25 @@ async function authenticate(req, res, next){
     const userService = ServiceLocator.getService(UserService.name);
 
     try{
-        const { payload: user, error } = await userService.getUser(req.body);
+        const { payload: user, error } = await userService.getUserByEmail(req.body);
 
         if(error) {
             res.status(400).json(error);
         } else {
-            bcrypt.compare(req.body.password, user.password, function(err, result) {
+            bcrypt.compare(req.body.user_password, user.user_password, function(err, result) {
                 if(err) {
                     res.status(500).send("Internal Error");
                     return;
                 }
                 req.auth = result;
                 if(result){
-                    req.token = jwt.sign({ id: user.id }, secret, {
+                    req.user_email=user.user_email;
+                    req.user_name=user.user_name;
+                    req.user_type=user.user_type;
+                    req.user_id=user.user_id;
+                    req.token = jwt.sign({ id: user.user_id }, secret, {
                         expiresIn: 86400 // 24 hours
-                    });
+                    }); 
                 }
                 next();
             });
@@ -50,7 +54,7 @@ function encrypt(req, res, next){
 };
 
 function verifyToken(req, res, next) {
-    let token = req.headers["x-access-token"];
+    let token = req.headers["token"];
     if (!token) {
       return res.status(403).send({
         message: "No token provided!"
@@ -63,7 +67,7 @@ function verifyToken(req, res, next) {
           message: "Unauthorized!"
         });
       }
-      req.id = decoded.id;
+      req.user_id = decoded.id;
       next();
     });
 };
