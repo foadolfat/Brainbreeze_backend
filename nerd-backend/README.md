@@ -12,6 +12,7 @@
 ### POST
 - Creates new user
 /api/user
+</br>
 body:</br>
 {</br>
     "user_name": "string",</br>
@@ -19,19 +20,47 @@ body:</br>
     "user_email": "string",</br>
     "user_type": "string",</br>
 }</br>
-
+res:</br>
+{</br>
+	message:boolean (true if user creation successful)
+}</br>
+</br>
 ### GET 
+- Sign user in
+/api/user/signin</br>
+</br>
+req.body:</br>
+{</br>
+	"user_email":"string",</br>
+	"user_password":"string"
+}</br>
+res:</br>
+{</br>
+	auth:boolean(true if authenticated),</br>
+	token:jwt token,</br>
+	user_email:string,</br>
+	user_name:string,</br>
+	user_type:string,</br>
+	user_id:int</br>
+}</br>
+</br>
 - Retrieve user information such as email, type and name
-/api/user/[user_id]
-OR
-[URL]/api/user
-body:
-{
-	"user_email":"string"
-}
+/api/user/[user_id]</br>
+</br>
+body:</br>
+{</br>
+	"user_email":"string",</br>
+	"user_name":"string"
+}</br>
+header:</br>
+{</br>
+	"token":"string (jwt token saved from signing in)"
+}</br>
+</br>
+
 
 ### PUT
-- Update existing user
+- Update existing user's email and/or username
 /api/user/[user_id]
 
 ### DELETE
