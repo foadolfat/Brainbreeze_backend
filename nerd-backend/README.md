@@ -22,7 +22,7 @@ body:</br>
 }</br>
 res:</br>
 {</br>
-	message:boolean (true if user creation successful)
+        message:boolean (true if user creation successful)
 }</br>
 </br>
 
@@ -32,17 +32,17 @@ res:</br>
 </br>
 req.body:</br>
 {</br>
-	"user_email":"string",</br>
-	"user_password":"string"
+        "user_email":"string",</br>
+        "user_password":"string"
 }</br>
 res:</br>
 {</br>
         auth:boolean(true if authenticated),</br>
         token:jwt token,</br>
-	user_email:string,</br>
-	user_name:string,</br>
-	user_type:string,</br>
-	user_id:int</br>
+        user_email:string,</br>
+        user_name:string,</br>
+        user_type:string,</br>
+        user_id:int</br>
 }</br>
 </br>
 - Retrieve user information such as email, type and name
@@ -50,14 +50,21 @@ res:</br>
 </br>
 body:</br>
 {</br>
-	"user_email":"string",</br>
-	"user_name":"string"
+        "user_email":"string",</br>
+        "user_name":"string"
 }</br>
 header:</br>
 {</br>
-	"token":"string (jwt token saved from signing in)"
+        "token":"string (jwt token saved from signing in)"
 }</br>
 </br>
+res:</br>
+{</br>
+        user_id:int,
+        user_email:string,
+        user_name:string,
+        user_type:string
+}</br>
 
 
 ### PUT
@@ -68,7 +75,7 @@ header:</br>
 - Delete existing user
 /api/user/[user_id]
 
-
+================================================================================================
 ## Class end points
 
 ### POST
@@ -108,6 +115,8 @@ body:
 	"user_class":"integer (user_id)"
 }
 
+
+================================================================================================
 ## Lesson end points
 
 ### POST
@@ -143,6 +152,7 @@ body:
 	"module_id":"integer (module_id)"
 }
 
+================================================================================================
 ## Module end points
 
 ### POST
