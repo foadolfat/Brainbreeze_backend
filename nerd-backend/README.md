@@ -51,19 +51,19 @@ res:</br>
 body:</br>
 {</br>
         "user_email":"string",</br>
-        "user_name":"string"
+        "user_name":"string"</br>
 }</br>
 header:</br>
 {</br>
-        "token":"string (jwt token saved from signing in)"
+        "token":"string (jwt token saved from signing in)"</br>
 }</br>
 </br>
 res:</br>
 {</br>
-        user_id:int,
-        user_email:string,
-        user_name:string,
-        user_type:string
+        user_id:int,</br>
+        user_email:string,</br>
+        user_name:string,</br>
+        user_type:string</br>
 }</br>
 
 
