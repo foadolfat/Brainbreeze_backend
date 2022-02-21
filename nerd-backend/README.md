@@ -45,7 +45,7 @@ res:</br>
         user_id:int</br>
 }</br>
 </br>
-- Retrieve user information such as email, type and name
+- Retrieve user information such as email, type and name</br>
 /api/user/[user_id]</br>
 </br>
 body:</br>
@@ -68,13 +68,13 @@ res:</br>
 
 
 ### PUT
-- Update existing user's email and/or username
-/api/user/[user_id]
-
+- Update existing user's email and/or username</br>
+/api/user/update/[user_id]</br>
+</br>
 ### DELETE
-- Delete existing user
-/api/user/[user_id]
-
+- Delete existing user</br>
+/api/user/remove/[user_id]</br>
+</br>
 ================================================================================================
 ## Class end points
 
