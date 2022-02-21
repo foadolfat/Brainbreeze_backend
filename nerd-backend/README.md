@@ -13,7 +13,7 @@
 - Creates new user
 /api/user
 </br>
-body:</br>
+req.body:</br>
 {</br>
         "user_name": "string",</br>
         "user_password": "string",</br>
@@ -48,12 +48,12 @@ res:</br>
 - Retrieve user information such as email, type and name</br>
 /api/user/[user_id]</br>
 </br>
-body:</br>
+req.body:</br>
 {</br>
         "user_email":"string",</br>
         "user_name":"string"</br>
 }</br>
-header:</br>
+req.header:</br>
 {</br>
         "token":"string (jwt token saved from signing in)"</br>
 }</br>
@@ -71,11 +71,20 @@ res:</br>
 - Update existing user's email and/or username</br>
 /api/user/update/[user_id]</br>
 </br>
+req.header:</br>
+{</br>
+        "token":"string (jwt token saved from signing in)"</br>
+}</br>
+</br>
 ### DELETE
 - Delete existing user</br>
 /api/user/remove/[user_id]</br>
+req.header:</br>
+{</br>
+        "token":"string (jwt token saved from signing in)"</br>
+}</br>
 </br>
-================================================================================================
+================================================================================================</br>
 ## Class end points
 
 ### POST
@@ -116,7 +125,7 @@ body:
 }
 
 
-================================================================================================
+================================================================================================</br>
 ## Lesson end points
 
 ### POST
@@ -136,8 +145,8 @@ body:
 
 
 ### PUT
-- Update existing lesson
-/api/lesson/[lesson_id]
+- Update existing lesson</br>
+/api/lesson/[lesson_id]</br>
 body:
 {
 	"lesson_name":"string",
@@ -145,14 +154,14 @@ body:
 
 
 ### DELETE
-- Delete existing lesson
+- Delete existing lesson</br>
 /api/lesson/[lesson_id]
 body:
 {
 	"module_id":"integer (module_id)"
 }
 
-================================================================================================
+================================================================================================</br>
 ## Module end points
 
 ### POST
