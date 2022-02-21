@@ -15,10 +15,10 @@
 </br>
 body:</br>
 {</br>
-    "user_name": "string",</br>
-    "user_password": "string",</br>
-    "user_email": "string",</br>
-    "user_type": "string",</br>
+        "user_name": "string",</br>
+        "user_password": "string",</br>
+        "user_email": "string",</br>
+        "user_type": "string",</br>
 }</br>
 res:</br>
 {</br>
@@ -37,12 +37,12 @@ req.body:</br>
 }</br>
 res:</br>
 {</br>
-    auth:boolean(true if authenticated),</br>
-    token:jwt token,</br>
-    user_email:string,</br>
-    user_name:string,</br>
-    user_type:string,</br>
-    user_id:int</br>
+        auth:boolean(true if authenticated),</br>
+        token:jwt token,</br>
+	user_email:string,</br>
+	user_name:string,</br>
+	user_type:string,</br>
+	user_id:int</br>
 }</br>
 </br>
 - Retrieve user information such as email, type and name
