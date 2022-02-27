@@ -10,8 +10,8 @@
 ## User end point
 
 ### POST
-- Creates new user
-/api/user
+- Creates new user</br>
+/api/user</br>
 </br>
 req.body:</br>
 {</br>
