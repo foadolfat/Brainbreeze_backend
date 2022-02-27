@@ -51,6 +51,7 @@ res:</br>
 - Retrieve user information such as email, type and name</br>
 
 /api/user/[user_id]</br>
+
 </br>
 req.body:</br>
 {</br>
@@ -75,6 +76,7 @@ res:</br>
 - Update existing user's email and/or username</br>
 
 /api/user/update/[user_id]</br>
+
 </br>
 req.header:</br>
 {</br>
@@ -87,6 +89,7 @@ req.header:</br>
 - Delete existing user</br>
 
 /api/user/remove/[user_id]</br>
+</br>
 req.header:</br>
 {</br>
         "token":"string (jwt token saved from signing in)"</br>
