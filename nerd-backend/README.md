@@ -76,6 +76,8 @@ req.header:</br>
         "token":"string (jwt token saved from signing in)"</br>
 }</br>
 </br>
+
+
 ### DELETE
 - Delete existing user</br>
 /api/user/remove/[user_id]</br>
