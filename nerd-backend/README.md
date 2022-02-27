@@ -47,7 +47,7 @@ res:</br>
 </br>
 
 - Retrieve user information such as email, type and name</br>
-- 
+
 /api/user/[user_id]</br>
 </br>
 req.body:</br>
