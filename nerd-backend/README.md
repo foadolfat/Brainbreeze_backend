@@ -11,6 +11,7 @@
 
 ### POST
 - Creates new user</br>
+
 /api/user</br>
 </br>
 req.body:</br>
@@ -71,6 +72,7 @@ res:</br>
 
 ### PUT
 - Update existing user's email and/or username</br>
+
 /api/user/update/[user_id]</br>
 </br>
 req.header:</br>
@@ -82,6 +84,7 @@ req.header:</br>
 
 ### DELETE
 - Delete existing user</br>
+
 /api/user/remove/[user_id]</br>
 req.header:</br>
 {</br>
