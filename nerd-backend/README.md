@@ -10,35 +10,95 @@
 ## User end point
 
 ### POST
-- Creates new user<br/>
-/api/user<br/>
-body:<br/>
-{<br/>
-    "user_name": "string",<br/>
-    "user_password": "string",<br/>
-    "user_email": "string",<br/>
-    "user_type": "string",<br/>
-}<br/>
+
+- Creates new user</br>
+
+/api/user</br>
+</br>
+req.body:</br>
+{</br>
+        "user_name": "string",</br>
+        "user_password": "string",</br>
+        "user_email": "string",</br>
+        "user_type": "string",</br>
+}</br>
+res:</br>
+{</br>
+        message:boolean (true if user creation successful)
+}</br>
+</br>
+
+- Sign user in</br>
+
+/api/user/signin</br>
+</br>
+req.body:</br>
+{</br>
+        "user_email":"string",</br>
+        "user_password":"string"
+}</br>
+res:</br>
+{</br>
+        auth:boolean(true if authenticated),</br>
+        token:jwt token,</br>
+        user_email:string,</br>
+        user_name:string,</br>
+        user_type:string,</br>
+        user_id:int</br>
+}</br>
+</br>
+
 
 ### GET 
-- Retrieve user information such as email, type and name
-/api/user/[user_id]
-OR
-[URL]/api/user
-body:
-{
-	"user_email":"string"
-}
+
+- Retrieve user information such as email, type and name</br>
+
+/api/user/[user_id]</br>
+
+</br>
+req.body:</br>
+{</br>
+        "user_email":"string",</br>
+        "user_name":"string"</br>
+}</br>
+req.header:</br>
+{</br>
+        "token":"string (jwt token saved from signing in)"</br>
+}</br>
+</br>
+res:</br>
+{</br>
+        user_id:int,</br>
+        user_email:string,</br>
+        user_name:string,</br>
+        user_type:string</br>
+}</br>
+
 
 ### PUT
-- Update existing user
-/api/user/[user_id]
+- Update existing user's email and/or username</br>
+
+/api/user/update/[user_id]</br>
+
+</br>
+req.header:</br>
+{</br>
+        "token":"string (jwt token saved from signing in)"</br>
+}</br>
+</br>
+
 
 ### DELETE
-- Delete existing user
-/api/user/[user_id]
+- Delete existing user</br>
 
-
+/api/user/remove/[user_id]</br>
+</br>
+req.header:</br>
+{</br>
+        "token":"string (jwt token saved from signing in)"</br>
+}</br>
+</br>
+================================================================================================</br>
 ## Class end points
 
 ### POST
@@ -78,6 +138,8 @@ body:
 	"user_class":"integer (user_id)"
 }
 
+
+================================================================================================</br>
 ## Lesson end points
 
 ### POST
@@ -97,8 +159,8 @@ body:
 
 
 ### PUT
-- Update existing lesson
-/api/lesson/[lesson_id]
+- Update existing lesson</br>
+/api/lesson/[lesson_id]</br>
 body:
 {
 	"lesson_name":"string",
@@ -106,13 +168,14 @@ body:
 
 
 ### DELETE
-- Delete existing lesson
+- Delete existing lesson</br>
 /api/lesson/[lesson_id]
 body:
 {
 	"module_id":"integer (module_id)"
 }
 
+================================================================================================</br>
 ## Module end points
 
 ### POST
