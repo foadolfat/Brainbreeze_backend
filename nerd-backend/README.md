@@ -27,7 +27,6 @@ res:</br>
 }</br>
 </br>
 
-### GET 
 - Sign user in</br>
 
 /api/user/signin</br>
@@ -47,6 +46,8 @@ res:</br>
         user_id:int</br>
 }</br>
 </br>
+
+### GET 
 
 - Retrieve user information such as email, type and name</br>
 
