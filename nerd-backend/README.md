@@ -10,6 +10,7 @@
 ## User end point
 
 ### POST
+
 - Creates new user</br>
 
 /api/user</br>
@@ -46,6 +47,7 @@ res:</br>
         user_id:int</br>
 }</br>
 </br>
+
 
 ### GET 
 

@@ -35,7 +35,7 @@ router
         
     })
 
-    .get("/api/user/signin", AuthService.authenticate, async(req, res) => {
+    .post("/api/user/signin", AuthService.authenticate, async(req, res) => {
 
         if(!req.auth) {
             res.status(400).json(
