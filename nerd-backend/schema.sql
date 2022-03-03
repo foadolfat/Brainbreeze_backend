@@ -10,7 +10,7 @@ create table user_table
 (
     user_id SERIAL PRIMARY KEY,
     user_name VARCHAR(30) NOT NULL,
-    user_email VARCHAR(50),
+    user_email VARCHAR(50) UNIQUE,
     user_password BINARY(60) NOT NULL,
     user_type VARCHAR(30)
 );
