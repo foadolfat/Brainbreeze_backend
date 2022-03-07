@@ -87,6 +87,7 @@ class MySQLClassService extends ClassService {
         const updateClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 // currently only updating class name
+                // implements middleware to authenticate
                 sql: "UPDATE classes SET class_name=? WHERE class_id=? and user_class=?;",
                 values:[classDTO.class_name, classDTO.class_id, classDTO.user_class]
             },

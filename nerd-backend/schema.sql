@@ -10,7 +10,7 @@ create table user_table
 (
     user_id SERIAL PRIMARY KEY,
     user_name VARCHAR(30) NOT NULL,
-    user_email VARCHAR(50),
+    user_email VARCHAR(50) UNIQUE,
     user_password BINARY(60) NOT NULL,
     user_type VARCHAR(30)
 );
@@ -30,7 +30,7 @@ create table modules
 ); 
 create table lessons
 (
-  lessons_id INT PRIMARY KEY,
+  lesson_id INT PRIMARY KEY,
   lesson_name VARCHAR(30),
   lesson_descrip VARCHAR(100) ,
   module_id INT REFERENCES modules(module_id)

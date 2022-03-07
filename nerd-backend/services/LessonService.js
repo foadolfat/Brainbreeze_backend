@@ -1,14 +1,14 @@
 /**
  * @typedef {Object} Lesson
- * @property {number} lessons_id
+ * @property {number} lesson_id
  * @property {string} lesson_name
- * @property {string} lessonsdescrip
+ * @property {string} lesson_descrip
  * @property {number} module_id
  */
 
 /**
  * @typedef {Object} LessonDTO
- * @property {number} lessons_id
+ * @property {number} lesson_id
  * @property {string} lesson_name
  * @property {string} lesson_descrip
  * @property {number} module_id
@@ -17,7 +17,7 @@
  const BaseService = require("./utility/BaseService");
  const Result = require("./utility/Result").Result;
  
- class LessonsService extends BaseService{
+ class LessonService extends BaseService{
      
      /**
       * @param {LessonDTO} lessonDTO
@@ -49,4 +49,4 @@
 
  };
  
- module.exports = LessonsService
+ module.exports = LessonService
