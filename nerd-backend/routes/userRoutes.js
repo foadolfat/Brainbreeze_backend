@@ -11,7 +11,7 @@ router
         console.log('Access user route Time: ', Date.now());
         next();
     })
-
+    //testing with comments
     .post("/api/user", AuthService.encrypt, async(req, res) => {
         /**
          * @type {UserService}

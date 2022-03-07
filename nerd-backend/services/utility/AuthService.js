@@ -42,6 +42,7 @@ async function authenticate(req, res, next){
      }
 };
 
+
 function encrypt(req, res, next){
     bcrypt.hash(req.body.user_password, saltRounds, function(err, hash) {
         if(err) {
