@@ -22,8 +22,8 @@ class MySQLLessonService extends LessonService {
     async createLesson(lessonDTO) {
         const createLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO lessons (lesson_id, lesson_name, lesson_descrip, module_id) VALUES(?,?,?,?);",
-                values:[lessonDTO.lesson_id, lessonDTO.lesson_name, lessonDTO.lesson_descrip, lessonDTO.module_id]
+                sql: "INSERT INTO lessons ( lesson_name, lesson_descrip, module_id) VALUES(?,?,?);",
+                values:[ lessonDTO.lesson_name, lessonDTO.lesson_descrip, lessonDTO.module_id]
             },
             (err, results) => {
                 if(err) {

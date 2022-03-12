@@ -5,11 +5,13 @@ const MySQLUserService = require("./services/MySQL/MySQLUserService");
 const MySQLClassService = require("./services/MySQL/MySQLClassService");
 const MySQLModuleService = require("./services/MySQL/MySQLModuleService");
 const MySQLLessonService = require("./services/MySQL/MySQLLessonService");
+const MySQLUnitService = require("./services/MySQL/MySQLUnitService");
 
 const UserService = require("./services/UserService");
 const ClassService = require("./services/ClassService");
 const LessonService = require("./services/LessonService");
 const ModuleService = require("./services/ModuleService");
+const UnitService = require("./services/UnitService");
 
 const app = express();
 app.use(require('cors')());
@@ -21,6 +23,7 @@ app.use(require(`./routes/userRoutes`));
 app.use(require(`./routes/classRoutes`));
 app.use(require('./routes/lessonRoutes'));
 app.use(require('./routes/moduleRoutes'));
+app.use(require('./routes/unitRoutes'));
 
 const databaseSetup = async () => {
     
@@ -38,21 +41,25 @@ const databaseSetup = async () => {
         const classService = new MySQLClassService(connection);
         const lessonService = new MySQLLessonService(connection);
         const moduleService = new MySQLModuleService(connection);
+        const unitService = new MySQLUnitService(connection);
 
         await userService.init();
         await classService.init();
         await moduleService.init();
         await lessonService.init();
+        await unitService.init();
 
         ServiceLocator.setService(UserService.name, userService);
         ServiceLocator.setService(ClassService.name, classService);
         ServiceLocator.setService(ModuleService.name, moduleService);
         ServiceLocator.setService(LessonService.name, lessonService);
+        ServiceLocator.setService(UnitService.name, unitService);
 
         console.log("UserService initialized");
         console.log("ClassService initialized");
         console.log("ModuleService initialized");
         console.log("LessonService initialized");
+        console.log("UnitService initialized");
         console.log("Database set up complete");
     } catch(e){
         console.log(e);

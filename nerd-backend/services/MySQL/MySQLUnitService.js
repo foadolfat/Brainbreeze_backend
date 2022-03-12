@@ -1,7 +1,7 @@
 const { Result, IError } = require("../utility/Result");
-const ClassService = require("../ClassService");
+const UnitService = require("../UnitService");
 
-class MySQLClassService extends ClassService {
+class MySQLUnitService extends UnitService {
     /**
      * @param {import("mysql").Pool} connection
      */
@@ -16,14 +16,14 @@ class MySQLClassService extends ClassService {
 
 
     /**
-     * @param {import("../ClassService").ClassDTO} classDTO
+     * @param {import("../UnitService").unitDTO} unitDTO
      * @returns {Promise<Result<boolean>} 
      */
-    async createClass(classDTO) {
-        const createClassCMD = new Promise((resolve, reject) => {
+    async createUnit(unitDTO) {
+        const createUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO classes ( class_name, class_descrip, user_class) VALUES(?,?,?);",
-                values:[ classDTO.class_name, classDTO.class_descrip, classDTO.user_class]
+                sql: "INSERT INTO units ( unit_name, unit_content, lesson_id) VALUES(?,?,?);",
+                values:[unitDTO.unit_name, unitDTO.unit_content, unitDTO.lesson_id]
             },
             (err, results) => {
                 if(err) {
@@ -33,7 +33,7 @@ class MySQLClassService extends ClassService {
             });
         });
         try{
-            const results = await createClassCMD;
+            const results = await createUnitCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {
@@ -43,18 +43,17 @@ class MySQLClassService extends ClassService {
     }
 
     /**
-     * @param {import("../ClassService").ClassDTO} classDTO
-     * @returns {Promise<Result<import("../ClassService").Class>>} 
+     * @param {import("../UnitService").unitDTO} unitDTO
+     * @returns {Promise<Result<import("../UnitService").unit>>} 
      */
-    async getClass(classDTO){
+    async getUnit(unitDTO){
         /**
-         * @type {Promise<import("../ClassService").Class>}
+         * @type {Promise<import("../UnitService").unit>}
          */
-        const getClassCMD = new Promise((resolve, reject) => {
+        const getUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-			/* maybe change this later*/ 
-                sql:"SELECT * FROM classes WHERE class_id=? and user_class=?;",
-                values: [classDTO.class_id, classDTO.user_class]
+                sql:"SELECT * FROM Units WHERE unit_id=?;",
+                values: [unitDTO.unit_id]
             }, (err, results) => {
                 
                 if(err){
@@ -62,7 +61,7 @@ class MySQLClassService extends ClassService {
                 }
 
                 if(!results || results.length === 0){
-                    var err = new Error("Class does not exist!");
+                    var err = new Error("User does not exist!");
                     err.errno = 1404;
                     err.code = "NOT FOUND";
                     return reject(err);
@@ -71,8 +70,8 @@ class MySQLClassService extends ClassService {
             });
         });
         try{
-            const newClass = await getClassCMD;
-            return new Result(newClass, null);
+            const newunit = await getUnitCMD;
+            return new Result(newunit, null);
 
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
@@ -80,16 +79,14 @@ class MySQLClassService extends ClassService {
     }
 
         /**
-     * @param {import("../ClassService").ClassDTO} classDTO
+     * @param {import("../Unitservice").unitDTO} unitDTO
      * @returns {Promise<Result<boolean>>} 
      */
-    async updateClass(classDTO) {
-        const updateClassCMD = new Promise((resolve, reject) => {
+    async updateUnit(unitDTO) {
+        const updateUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                // currently only updating class name
-                // implements middleware to authenticate
-                sql: "UPDATE classes SET class_name=? WHERE class_id=? and user_class=?;",
-                values:[classDTO.class_name, classDTO.class_id, classDTO.user_class]
+                sql: "UPDATE units SET unit_name=? WHERE unit_id=?;",
+                values:[unitDTO.unit_name, unitDTO.unit_id]
             },
             (err, results) => {
                 
@@ -101,7 +98,7 @@ class MySQLClassService extends ClassService {
             });
         });
         try{
-            const results = await updateClassCMD;
+            const results = await updateUnitCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {
@@ -110,15 +107,15 @@ class MySQLClassService extends ClassService {
            
     }
 
-     /**
-     * @param {import("../ClassService").ClassDTO} classDTO
-     * @returns {Promise<Result<boolean>>}
+    /**
+     * @param {import("../Unitservice").unitDTO} unitDTO
+     * @returns {Promise<Result<boolean>>} 
      */
-    async deleteClass(classDTO) {
-        const deleteClassCMD = new Promise((resolve, reject) => {
+    async deleteUnit(unitDTO) {
+        const deleteUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM classes WHERE class_id=? and user_class=?;",
-                values:[classDTO.class_id, classDTO.user_class]
+                sql: "DELETE FROM Units WHERE unit_id=?;",
+                values:[unitDTO.unit_id]
             },
             (err, results) => {
                 
@@ -130,7 +127,7 @@ class MySQLClassService extends ClassService {
             });
         });
         try{
-            const results = await deleteClassCMD;
+            const results = await deleteUnitCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
 
@@ -143,4 +140,4 @@ class MySQLClassService extends ClassService {
     }
 
 }
-module.exports = MySQLClassService;
+module.exports = MySQLUnitService;
