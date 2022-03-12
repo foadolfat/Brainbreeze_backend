@@ -73,6 +73,7 @@ function verifyToken(req, res, next) {
     });
 };
 
+
 module.exports = {
     authenticate : authenticate,
     encrypt : encrypt,

@@ -11,8 +11,43 @@ router
         console.log('Access module route Time: ', Date.now());
         next();
     })
-
-    .post("/api/module", async(req, res) => {
+    /**
+    * @swagger
+    * /module/create:
+    *   post:
+    *     tags:
+    *       - Module
+    *     summary: Adds a new module to the database
+    *     description: Creates a new module in the database
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               module_name:
+    *                 type: string
+    *               module_descrip:
+    *                 type: string
+    *               class_id:
+    *                 type: integer
+    *     responses:
+    *       201:
+    *         description: The module was added to the database
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: The module was not added to the database
+    *       500:
+    *         description: An internal error occured
+    */
+    .post("/api/module/create", async(req, res) => {
         /**
          * @type {ModuleService}
          */
@@ -68,7 +103,7 @@ router
     })
 
 
-    .put("/api/module/:id", async(req, res) => {
+    .put("/api/module/update/:id", async(req, res) => {
 
         /**
          * @type {ModuleService}
@@ -94,7 +129,7 @@ router
     })
 
 
-    .delete("/api/module/:id", async(req, res) => {
+    .delete("/api/module/delete/:id", async(req, res) => {
 
         /**
          * @type {ModuleService}

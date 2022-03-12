@@ -325,7 +325,7 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .delete("/api/user/remove/:id", AuthService.verifyToken, async(req, res) => {
+    .delete("/api/user/delete/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}

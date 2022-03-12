@@ -1,8 +1,7 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
-drop table quizzes;
-drop table units;
+drop table units; 
 drop table lessons;
 drop table modules;
 drop table classes;
@@ -46,13 +45,4 @@ create table units
 	unit_name VARCHAR(30),
 	unit_content VARBINARY(500),
 	lesson_id INT REFERENCES lessons(lesson_id)
-);
-create table quizzes
-(
-	quiz_id SERIAL PRIMARY KEY,
-	quiz_index INT,
-	quiz_name VARCHAR(30),
-	quiz_content VARBINARY(500),
-	quiz_answers VARBINARY(500),
-	unit_id INT REFERENCES units(unit_id)
 );
