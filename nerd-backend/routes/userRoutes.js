@@ -11,8 +11,46 @@ router
         console.log('Access user route Time: ', Date.now());
         next();
     })
-
-    .post("/api/user", AuthService.encrypt, async(req, res) => {
+    
+    /**
+    * @swagger
+    * /user/create:
+    *   post:
+    *     tags:
+    *       - User
+    *     summary: Adds a new user to the database
+    *     description: Creates a new user in the database
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               user_name:
+    *                 type: string
+    *               user_email:
+    *                 type: string
+    *               user_password:
+    *                 type: string
+    *               user_type:
+    *                 type: string
+    *     responses:
+    *       201:
+    *         description: The user was added to the database
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: The user was not added to the database
+    *       500:
+    *         description: An internal error occured
+    */
+    .post("/api/user/create", AuthService.encrypt, async(req, res) => {
         /**
          * @type {UserService}
          */
@@ -35,7 +73,123 @@ router
         
     })
 
-    .get("/api/user/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /user/signin:
+    *   post:
+    *     tags:
+    *       - User
+    *     summary: Sign in with an existing user and recieve a token
+    *     description: Signs in with an existing user and recieves a token
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               user_email:
+    *                 type: string
+    *               user_password:
+    *                 type: string
+    *     responses:
+    *       201:
+    *         description: The user was added to the database
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 auth:
+    *                   type: boolean
+    *                 token:
+    *                   type: string
+    *                 user_id:
+    *                   type: string
+    *                 user_name:
+    *                   type: string
+    *                 user_email:
+    *                   type: string
+    *                 user_type:
+    *                   type: string
+    *       400:
+    *         description: The user was not added to the database
+    *       500:
+    *         description: An internal error occured
+    */
+    .post("/api/user/signin", AuthService.authenticate, async(req, res) => {
+
+        if(!req.auth) {
+            res.status(400).json(
+                {
+                    message: "Invalid credentials"
+                }
+            );
+        } else {
+            res
+                .status(200)
+                .json(
+                    {
+                        auth:req.auth,
+                        token:req.token,
+                        user_email:req.user_email,
+                        user_name:req.user_name,
+                        user_type:req.user_type,
+                        user_id:req.user_id
+                    }
+                );
+        }
+
+    })
+    /**
+    * @swagger
+    * /user/{id}:
+    *   get:
+    *     tags:
+    *       - User
+    *     summary: Retrieve a single user.
+    *     description: Retrieve a single user. Can be used to populate a user profile when prototyping or testing an API.
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         description: Numeric ID of the user to retrieve.
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     responses:
+    *       200:
+    *         description: Retrieved a single user by id.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 user_id: 
+    *                   type: integer
+    *                   description: The user ID.
+    *                   example: 0
+    *                 user_name: 
+    *                   type: string
+    *                   description: The user's name.
+    *                   example: Leanne Graham
+    *                 user_email: 
+    *                   type: string
+    *                   description: The user's email.
+    *                   example: john@email.com
+    *                 user_type: 
+    *                   type: string
+    *                   description: The user's type.
+    *                   example: admin
+    *       400:
+    *         description: The user was not retrieved.
+    *       500:
+    *         description: An internal error occured.
+    */
+    .get("/api/user/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}
@@ -44,7 +198,7 @@ router
         req.body.user_id = req.params.id;
         try{
             
-            const { payload: user, error } = await userService.getUser(req.body);
+            const { payload: user, error } = await userService.getUserById(req.body);
 
             if(error) {
                 res.status(400).json(error);
@@ -67,14 +221,58 @@ router
 
     })
 
-
-    .put("/api/user/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /user/update/{id}:
+    *   put:
+    *     tags:
+    *       - User
+    *     summary: Update a single user.
+    *     description: Update a single user, by sending the user's id and the user's new information. The user's id is required to update the user.NOTE The user's password and email are not updated. Anyfield left blank will be erased.
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         description: Numeric ID of the user to update.
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               user_name:
+    *                 type: string
+    *               user_type:
+    *                 type: string
+    *     responses:
+    *       200:
+    *         description: The user was updated.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: The user was not added to the database
+    *       500:
+    *         description: An internal error occured
+    */
+    .put("/api/user/update/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.params.id;
+        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.updateUser(req.body);
@@ -93,14 +291,47 @@ router
 
     })
 
-
-    .delete("/api/user/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /user/delete/{id}:
+    *   delete:
+    *     tags:
+    *       - User
+    *     summary: Delete a single user.
+    *     description: Delete a single user, by sending the user's id. The user's id is required to delete the user.
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         description: Numeric ID of the user to delete.
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     responses:
+    *       200:
+    *         description: The user was deleted.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: The user was not added to the database
+    *       500:
+    *         description: An internal error occured
+    */
+    .delete("/api/user/remove/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.params.id;
+        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.deleteUser(req.body);
