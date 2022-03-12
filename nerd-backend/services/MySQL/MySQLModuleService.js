@@ -22,8 +22,8 @@ class MySQLModuleService extends ModuleService {
     async createModule(moduleDTO) {
         const createModuleCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO modules (module_id, module_name, module_descrip, class_id) VALUES(?,?,?,?);",
-                values:[moduleDTO.module_id, moduleDTO.module_name, moduleDTO.module_descrip, moduleDTO.class_id]
+                sql: "INSERT INTO modules ( module_name, module_descrip, class_id) VALUES(?,?,?);",
+                values:[ moduleDTO.module_name, moduleDTO.module_descrip, moduleDTO.class_id]
             },
             (err, results) => {
                 if(err) {
