@@ -4,6 +4,7 @@
  * @property {string} module_name
  * @property {string} module_descrip
  * @property {number} class_id
+ * @property {number} instructor_id
  */
 
 /**
@@ -12,6 +13,7 @@
  * @property {string} module_name
  * @property {string} module_descrip
  * @property {number} class_id
+ * @property {number} instructor_id
  */
 
  const BaseService = require("./utility/BaseService");
@@ -45,6 +47,14 @@
       * @returns {Promise<Result<Module>>}
       */
      getModule(moduleDTO){ }
+
+    /**
+     * @param {ModuleDTO} moduleDTO
+     * @returns {Promise<Result<Module>>} 
+     */
+    async getModuleByClassId(moduleDTO){ }
+
+    
  
 
  };

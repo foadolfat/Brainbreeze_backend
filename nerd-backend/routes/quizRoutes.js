@@ -3,24 +3,22 @@ var router = express.Router();
 const ServiceLocator = require("../services/utility/ServiceLocator");
 const AuthService = require("../services/utility/AuthService");
 
-const UnitService = require("../services/UnitService");
+const QuizService = require("../services/QuizService");
 
-
-//unit routes
+//quiz routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access unit route Time: ', Date.now());
+        console.log('Access quiz route Time: ', Date.now());
         next();
     })
-
     /**
     * @swagger
-    * /unit/create:
+    * /quiz/create:
     *   post:
     *     tags:
-    *       - Unit
-    *     summary: Create a new unit
-    *     description: Create a new unit by an instructor
+    *       - Quiz
+    *     summary: Create a new quiz
+    *     description: Create a new quiz by an instructor
     *     parameters:
     *       - in: header
     *         name: token
@@ -34,17 +32,21 @@ router
     *           schema:
     *             type: object
     *             properties:
-    *               unit_name:
+    *               quiz_name:
     *                 type: string
-    *               unit_content:
-    *                 type: string
-    *               lesson_id:
+    *               quiz_index:
     *                 type: integer
-    *               instructor_id:
+    *               quiz_type:
+    *                 type: string
+    *               quiz_content:
+    *                 type: string
+    *               quiz_answers:
+    *                 type: string
+    *               unit_id:
     *                 type: integer
     *     responses:
     *       201:
-    *         description: Successfully created unit
+    *         description: Successfully created quiz
     *         content:
     *           application/json:
     *             schema:
@@ -75,14 +77,14 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/unit/create", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/quiz", AuthService.verifyToken, async(req, res) => {
         /**
-         * @type {UnitService}
+         * @type {QuizService}
          */
-        const unitService = ServiceLocator.getService(UnitService.name);
-        req.body.user_id = req.user_id;
+        const quizService = ServiceLocator.getService(QuizService.name);
+
         try{
-            const { payload: message, error } = await unitService.createUnit(req.body);
+            const { payload: message, error } = await quizService.createQuiz(req.body);
             if(error) {
                 res.status(400).json(error);
             } else {
@@ -91,7 +93,7 @@ router
                     .json({message: message});
             }
         }catch(e){
-            console.log("An error occured in unitRoutes, post/unit");
+            console.log("An error occured in quizRoutes, post/quiz");
             res.status(500).end();
         }
         
@@ -100,35 +102,43 @@ router
 
     /**
     * @swagger
-    * /unit/{id}:
+    * /quiz/{id}:
     *   get:
     *     tags:
-    *       - Unit
-    *     summary: retrieve a unit
-    *     description: retrieve aunit by id
+    *       - Quiz
+    *     summary: Get a quiz by id
+    *     description: Get a quiz by id
     *     parameters:
     *       - in: path
     *         name: id
-    *         description: unit id
+    *         description: the id of the quiz
     *         required: true
     *         type: integer
     *     responses:
     *       200:
+    *         description: Successfully retrieved quiz
     *         content:
     *           application/json:
     *             schema:
     *               type: object
     *               properties:
-    *                 unit_id:
-    *                   type: integer
-    *                 unit_name:
-    *                   type: string
-    *                 unit_content:
-    *                   type: string
-    *                 lesson_id:
-    *                   type: integer
-    *                 instructor_id:
-    *                   type: integer
+    *                 quiz:
+    *                   type: object
+    *                   properties:
+    *                     quiz_id:
+    *                       type: integer
+    *                     quiz_name:
+    *                       type: string
+    *                     quiz_index:
+    *                       type: integer
+    *                     quiz_type:
+    *                       type: string
+    *                     quiz_content:
+    *                       type: string
+    *                     quiz_answers:
+    *                       type: string
+    *                     unit_id:
+    *                       type: integer
     *       400:
     *         description: Bad Request
     *         content:
@@ -138,19 +148,30 @@ router
     *               properties:
     *                 error:
     *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
     *       500:
     *         description: An internal error occured.
     */
-    .get("/api/unit/:id", async(req, res) => {
+    .get("/api/quiz/:id", async(req, res) => {
 
         /**
-         * @type {UnitService}
+         * @type {QuizService}
          */
-        const unitService = ServiceLocator.getService(UnitService.name);
-        req.body.unit_id = req.params.id;
+        const quizService = ServiceLocator.getService(QuizService.name);
+        req.body.quiz_id = req.params.id;
         try{
             
-            const { payload: unit, error } = await unitService.getUnit(req.body);
+            const { payload: quiz, error } = await quizService.getQuiz(req.body);
 
             if(error) {
                 res.status(400).json(error);
@@ -159,15 +180,17 @@ router
                     .status(200)
                     .json(
                         {
-                            unit_id:unit.unit_id,
-                            unit_name:unit.unit_name,
-                            unit_content:unit.unit_content,
-                            lessson_id:unit.lesson_id
+                            quiz_id:quiz.quiz_id,
+                            quiz_name:quiz.quiz_name,
+							quiz_type:quiz.quiz_type,
+                            quiz_content:quiz.quiz_content,
+							quiz_answers:answer.quiz_answers,
+                            unit_id:quiz.quiz_id
                         }
                     );
             }
         }catch(e){
-            console.log("an error occured in unitRoutes, get/unit");
+            console.log("an error occured in quizRoutes, get/quiz");
             res.status(500).end();
         }
 
@@ -175,16 +198,16 @@ router
 
     /**
     * @swagger
-    * /unit/update/{id}:
+    * /quiz/update/{id}:
     *   put:
     *     tags:
-    *       - Unit
-    *     summary: update a unit
-    *     description: update a unit by id
+    *       - Quiz
+    *     summary: Update a quiz by id
+    *     description: Update a quiz by id
     *     parameters:
     *       - in: path
     *         name: id
-    *         description: unit id
+    *         description: the id of the quiz
     *         required: true
     *         type: integer
     *       - in: header
@@ -199,17 +222,21 @@ router
     *           schema:
     *             type: object
     *             properties:
-    *               unit_name:
+    *               quiz_name:
     *                 type: string
-    *               unit_content:
-    *                 type: string
-    *               lesson_id:
+    *               quiz_index:
     *                 type: integer
-    *               instructor_id:
+    *               quiz_type:
+    *                 type: string
+    *               quiz_content:
+    *                 type: string
+    *               quiz_answers:
+    *                 type: string
+    *               unit_id:
     *                 type: integer
     *     responses:
     *       200:
-    *         description: Successfully updated unit
+    *         description: Successfully updated quiz
     *         content:
     *           application/json:
     *             schema:
@@ -240,16 +267,16 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .put("/api/unit/update/:id", AuthService.verifyToken, async(req, res) => {
+    .put("/api/quiz/update/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
-         * @type {unitService}
+         * @type {quizService}
          */
-        const unitService = ServiceLocator.getService(UnitService.name);
-        req.body.unit_id = req.params.id;
+        const quizService = ServiceLocator.getService(QuizService.name);
+        req.body.quiz_id = req.params.id;
         try{
             
-            const { payload: message, error } = await unitService.updateUnit(req.body);
+            const { payload: message, error } = await quizService.updateQuiz(req.body);
 
             if(error) {
                 res.status(400).json(error);
@@ -259,7 +286,7 @@ router
                     .json({message: message});
             }
         }catch(e){
-            console.log("an error occured in unitRoutes, put/unit");
+            console.log("an error occured in quizRoutes, put/quiz");
             res.status(500).end();
         }
 
@@ -267,16 +294,16 @@ router
 
     /**
     * @swagger
-    * /unit/delete/{id}:
+    * /quiz/delete/{id}:
     *   delete:
     *     tags:
-    *       - Unit
-    *     summary: delete a unit
-    *     description: delete a unit by id
+    *       - Quiz
+    *     summary: Delete a quiz by id
+    *     description: Delete a quiz by id
     *     parameters:
     *       - in: path
     *         name: id
-    *         description: unit id
+    *         description: the id of the quiz
     *         required: true
     *         type: integer
     *       - in: header
@@ -286,7 +313,7 @@ router
     *         type: string
     *     responses:
     *       200:
-    *         description: Successfully deleted unit
+    *         description: Successfully deleted quiz
     *         content:
     *           application/json:
     *             schema:
@@ -317,16 +344,16 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .delete("/api/unit/:id", AuthService.verifyToken, async(req, res) => {
+    .delete("/api/quiz/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
-         * @type {unitService}
+         * @type {quizService}
          */
-        const unitService = ServiceLocator.getService(UnitService.name);
-        req.body.unit_id = req.params.id;
+        const quizService = ServiceLocator.getService(QuizService.name);
+        req.body.quiz_id = req.params.id;
         try{
             
-            const { payload: message, error } = await unitService.deleteUnit(req.body);
+            const { payload: message, error } = await quizService.deleteQuiz(req.body);
 
             if(error) {
                 res.status(400).json(error);
@@ -340,7 +367,7 @@ router
                     );
             }
         }catch(e){
-            console.log("an error occured in unitRoutes, delete/unit");
+            console.log("an error occured in quizRoutes, delete/quiz");
             res.status(500).end();
         }
 

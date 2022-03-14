@@ -45,6 +45,48 @@
       * @returns {Promise<Result<Class>>}
       */
      getClass(classDTO){ }
+
+         /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Class>>} 
+     */
+    async getClassById(classDTO){ }
+
+        /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Class>>} 
+     */
+    async getClassByName(classDTO){ }
+
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Class>>} 
+     */
+    async getAllClassesByUser(classDTO){ }
+
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Class>>} 
+     */
+    async getRoster(classDTO){ }
+
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Class>>} 
+     */
+    async getClassByUserId(classDTO){ }
+
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<boolean>>}
+     */
+    async dropClass(classDTO) { }
+
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<boolean>} 
+     */
+    async signUp(classDTO) { }
  
 
  };

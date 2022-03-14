@@ -148,7 +148,7 @@ router
     *     tags:
     *       - User
     *     summary: Retrieve a single user.
-    *     description: Retrieve a single user. Can be used to populate a user profile when prototyping or testing an API.
+    *     description: Retrieve a single user. Only the user that created the user can retrieve it.
     *     parameters:
     *       - in: path
     *         name: id
@@ -186,6 +186,10 @@ router
     *                   example: admin
     *       400:
     *         description: The user was not retrieved.
+    *       401:
+    *         description: The user was not retrieved because the user is not authorized
+    *       403:
+    *         description: The user was not retrieved because no token was provided in header
     *       500:
     *         description: An internal error occured.
     */
@@ -262,7 +266,11 @@ router
     *                 message: 
     *                   type: boolean
     *       400:
-    *         description: The user was not added to the database
+    *         description: The user was not updated
+    *       401:
+    *         description: The user was not updated because the user is not authorized
+    *       403:
+    *         description: The user was not updated because no token was provided in header
     *       500:
     *         description: An internal error occured
     */
@@ -321,7 +329,11 @@ router
     *                 message: 
     *                   type: boolean
     *       400:
-    *         description: The user was not added to the database
+    *         description: The user was not deleted from the database
+    *       401:
+    *         description: The user was not deleted because the user is not authorized
+    *       403:
+    *         description: The user was not deleted because no token was provided in header
     *       500:
     *         description: An internal error occured
     */

@@ -47,6 +47,18 @@
       * @returns {Promise<Result<User>>}
       */
      getUser(userDTO){ }
+
+    /**
+     * @param {UserDTO} userDTO
+     * @returns {Promise<Result<User>>} 
+     */
+    getUserByEmail(userDTO){ }
+
+        /**
+     * @param {UserDTO} userDTO
+     * @returns {Promise<Result<User>>} 
+     */
+    getUserById(userDTO){ }
  
 
  };

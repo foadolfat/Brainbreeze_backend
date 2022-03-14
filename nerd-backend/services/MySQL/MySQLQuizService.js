@@ -1,8 +1,7 @@
 const { Result, IError } = require("../utility/Result");
-const UnitService = require("../UnitService");
+const QuizService = require("../QuizService");
 
-//TODO: implement proper authenitcation within db
-class MySQLUnitService extends UnitService {
+class MySQLQuizService extends QuizService {
     /**
      * @param {import("mysql").Pool} connection
      */
@@ -17,14 +16,14 @@ class MySQLUnitService extends UnitService {
 
 
     /**
-     * @param {import("../UnitService").unitDTO} unitDTO
+     * @param {import("../QuizService").quizDTO} quizDTO
      * @returns {Promise<Result<boolean>} 
      */
-    async createUnit(unitDTO) {
-        const createUnitCMD = new Promise((resolve, reject) => {
+    async createQuiz(quizDTO) {
+        const createQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO units ( unit_name, unit_content, lesson_id, instructor_id) VALUES(?,?,?,?);",
-                values:[unitDTO.unit_name, unitDTO.unit_content, unitDTO.lesson_id, unitDTO.instructor_id]
+                sql: "INSERT INTO quizzes (quiz_index, quiz_name, quiz_type, quiz_content, quiz_answers, unit_id) VALUES(?,?,?,?,?,?);",
+                values:[quizDTO.quiz_index, quizDTO.quiz_name, quizDTO.quiz_type, quizDTO.quiz_content, quizDTO.quiz_answers, quizDTO.unit_id]
             },
             (err, results) => {
                 if(err) {
@@ -34,7 +33,7 @@ class MySQLUnitService extends UnitService {
             });
         });
         try{
-            const results = await createUnitCMD;
+            const results = await createQuizCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {
@@ -44,17 +43,17 @@ class MySQLUnitService extends UnitService {
     }
 
     /**
-     * @param {import("../UnitService").unitDTO} unitDTO
-     * @returns {Promise<Result<import("../UnitService").unit>>} 
+     * @param {import("../QuizService").quizDTO} quizDTO
+     * @returns {Promise<Result<boolean>} 
      */
-    async getUnit(unitDTO){
+    async getquiz(quizDTO){
         /**
-         * @type {Promise<import("../UnitService").unit>}
+         * @type {Promise<import("../QuizService").quiz>}
          */
-        const getUnitCMD = new Promise((resolve, reject) => {
+        const getQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Units WHERE unit_id=?;",
-                values: [unitDTO.unit_id]
+                sql:"SELECT * FROM Quizs WHERE quiz_id=?;",
+                values: [quizDTO.quiz_id]
             }, (err, results) => {
                 
                 if(err){
@@ -71,23 +70,23 @@ class MySQLUnitService extends UnitService {
             });
         });
         try{
-            const newunit = await getUnitCMD;
-            return new Result(newunit, null);
+            const newQuiz = await getQuizCMD;
+            return new Result(newquiz, null);
 
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
     }
-
-        /**
-     * @param {import("../Unitservice").unitDTO} unitDTO
-     * @returns {Promise<Result<boolean>>} 
-     */
-    async updateUnit(unitDTO) {
-        const updateUnitCMD = new Promise((resolve, reject) => {
+/*   "Update may require different parameters to update properly"
+    /**
+     * @param {import("../QuizService").quizDTO} quizDTO
+     * @returns {Promise<Result<boolean>} 
+     *//*
+    async updateQuiz(quizDTO) {
+        const updateQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE units SET unit_name=? WHERE unit_id=?;",
-                values:[unitDTO.unit_name, unitDTO.unit_id]
+                sql: "UPDATE Quizs SET quiz_name=? WHERE quiz_id=?;",
+                values:[quizDTO.quiz_name, quizDTO.quiz_id]
             },
             (err, results) => {
                 
@@ -99,7 +98,7 @@ class MySQLUnitService extends UnitService {
             });
         });
         try{
-            const results = await updateUnitCMD;
+            const results = await updateQuizCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {
@@ -107,16 +106,16 @@ class MySQLUnitService extends UnitService {
         }
            
     }
-
+*/
     /**
-     * @param {import("../Unitservice").unitDTO} unitDTO
-     * @returns {Promise<Result<boolean>>} 
+     * @param {import("../QuizService").quizDTO} quizDTO
+     * @returns {Promise<Result<boolean>} 
      */
-    async deleteUnit(unitDTO) {
-        const deleteUnitCMD = new Promise((resolve, reject) => {
+    async deleteQuiz(quizDTO) {
+        const deleteQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM Units WHERE unit_id=?;",
-                values:[unitDTO.unit_id]
+                sql: "DELETE FROM Quizs WHERE quiz_id=?;",
+                values:[quizDTO.quiz_id]
             },
             (err, results) => {
                 
@@ -128,7 +127,7 @@ class MySQLUnitService extends UnitService {
             });
         });
         try{
-            const results = await deleteUnitCMD;
+            const results = await deleteQuizCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
 
@@ -141,4 +140,4 @@ class MySQLUnitService extends UnitService {
     }
 
 }
-module.exports = MySQLUnitService;
+module.exports = MySQLQuizService;
