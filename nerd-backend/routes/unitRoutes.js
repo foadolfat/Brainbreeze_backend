@@ -5,6 +5,7 @@ const AuthService = require("../services/utility/AuthService");
 
 const UnitService = require("../services/UnitService");
 
+
 //unit routes
 router
     .use(function timeLog(req, res, next) {
@@ -12,12 +13,74 @@ router
         next();
     })
 
-    .post("/api/unit", async(req, res) => {
+    /**
+    * @swagger
+    * /unit/create:
+    *   post:
+    *     tags:
+    *       - Unit
+    *     summary: Create a new unit
+    *     description: Create a new unit by an instructor
+    *     parameters:
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               unit_name:
+    *                 type: string
+    *               unit_content:
+    *                 type: string
+    *               lesson_id:
+    *                 type: integer
+    *               instructor_id:
+    *                 type: integer
+    *     responses:
+    *       201:
+    *         description: Successfully created unit
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .post("/api/unit/create", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
         /**
          * @type {UnitService}
          */
         const unitService = ServiceLocator.getService(UnitService.name);
-
+        req.body.user_id = req.user_id;
         try{
             const { payload: message, error } = await unitService.createUnit(req.body);
             if(error) {
@@ -35,6 +98,49 @@ router
         
     })
 
+    /**
+    * @swagger
+    * /unit/{id}:
+    *   get:
+    *     tags:
+    *       - Unit
+    *     summary: retrieve a unit
+    *     description: retrieve aunit by id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: unit id
+    *         required: true
+    *         type: integer
+    *     responses:
+    *       200:
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 unit_id:
+    *                   type: integer
+    *                 unit_name:
+    *                   type: string
+    *                 unit_content:
+    *                   type: string
+    *                 lesson_id:
+    *                   type: integer
+    *                 instructor_id:
+    *                   type: integer
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       500:
+    *         description: An internal error occured.
+    */
     .get("/api/unit/:id", async(req, res) => {
 
         /**
@@ -67,8 +173,74 @@ router
 
     })
 
-
-    .put("/api/unit/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /unit/update/{id}:
+    *   put:
+    *     tags:
+    *       - Unit
+    *     summary: update a unit
+    *     description: update a unit by id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: unit id
+    *         required: true
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               unit_name:
+    *                 type: string
+    *               unit_content:
+    *                 type: string
+    *               lesson_id:
+    *                 type: integer
+    *               instructor_id:
+    *                 type: integer
+    *     responses:
+    *       200:
+    *         description: Successfully updated unit
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .put("/api/unit/update/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {unitService}
@@ -93,8 +265,59 @@ router
 
     })
 
-
-    .delete("/api/unit/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /unit/delete/{id}:
+    *   delete:
+    *     tags:
+    *       - Unit
+    *     summary: delete a unit
+    *     description: delete a unit by id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: unit id
+    *         required: true
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     responses:
+    *       200:
+    *         description: Successfully deleted unit
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .delete("/api/unit/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {unitService}

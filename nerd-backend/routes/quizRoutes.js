@@ -11,8 +11,73 @@ router
         console.log('Access quiz route Time: ', Date.now());
         next();
     })
-
-    .post("/api/quiz", async(req, res) => {
+    /**
+    * @swagger
+    * /quiz/create:
+    *   post:
+    *     tags:
+    *       - Quiz
+    *     summary: Create a new quiz
+    *     description: Create a new quiz by an instructor
+    *     parameters:
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               quiz_name:
+    *                 type: string
+    *               quiz_index:
+    *                 type: integer
+    *               quiz_type:
+    *                 type: string
+    *               quiz_content:
+    *                 type: string
+    *               quiz_answers:
+    *                 type: string
+    *               unit_id:
+    *                 type: integer
+    *     responses:
+    *       201:
+    *         description: Successfully created quiz
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .post("/api/quiz", AuthService.verifyToken, async(req, res) => {
         /**
          * @type {QuizService}
          */
@@ -35,6 +100,68 @@ router
         
     })
 
+    /**
+    * @swagger
+    * /quiz/{id}:
+    *   get:
+    *     tags:
+    *       - Quiz
+    *     summary: Get a quiz by id
+    *     description: Get a quiz by id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: the id of the quiz
+    *         required: true
+    *         type: integer
+    *     responses:
+    *       200:
+    *         description: Successfully retrieved quiz
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 quiz:
+    *                   type: object
+    *                   properties:
+    *                     quiz_id:
+    *                       type: integer
+    *                     quiz_name:
+    *                       type: string
+    *                     quiz_index:
+    *                       type: integer
+    *                     quiz_type:
+    *                       type: string
+    *                     quiz_content:
+    *                       type: string
+    *                     quiz_answers:
+    *                       type: string
+    *                     unit_id:
+    *                       type: integer
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
     .get("/api/quiz/:id", async(req, res) => {
 
         /**
@@ -69,8 +196,78 @@ router
 
     })
 
-
-    .put("/api/quiz/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /quiz/update/{id}:
+    *   put:
+    *     tags:
+    *       - Quiz
+    *     summary: Update a quiz by id
+    *     description: Update a quiz by id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: the id of the quiz
+    *         required: true
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               quiz_name:
+    *                 type: string
+    *               quiz_index:
+    *                 type: integer
+    *               quiz_type:
+    *                 type: string
+    *               quiz_content:
+    *                 type: string
+    *               quiz_answers:
+    *                 type: string
+    *               unit_id:
+    *                 type: integer
+    *     responses:
+    *       200:
+    *         description: Successfully updated quiz
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .put("/api/quiz/update/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {quizService}
@@ -95,8 +292,59 @@ router
 
     })
 
-
-    .delete("/api/quiz/:id", async(req, res) => {
+    /**
+    * @swagger
+    * /quiz/delete/{id}:
+    *   delete:
+    *     tags:
+    *       - Quiz
+    *     summary: Delete a quiz by id
+    *     description: Delete a quiz by id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: the id of the quiz
+    *         required: true
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     responses:
+    *       200:
+    *         description: Successfully deleted quiz
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .delete("/api/quiz/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {quizService}
