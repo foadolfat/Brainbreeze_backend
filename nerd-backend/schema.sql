@@ -31,9 +31,8 @@ create table modules
   module_id SERIAL PRIMARY KEY,
   module_name VARCHAR(40) NOT NULL,
   module_descrip VARCHAR(100),
-  class_id CHAR(36) NOT NULL,
   instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
-  class_id CHAR(36) REFERENCES classes(class_id)
+  class_id CHAR(36) NOT NULL REFERENCES classes(class_id)
 ); 
 create table lessons
 (
