@@ -50,13 +50,14 @@ class MySQLUserService extends UserService {
         /**
          * @type {Promise<import("../UserService").User>}
          */
+        console.log(userDTO);
         const getUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
 			/* maybe change this later*/ 
-                sql:"SELECT *, CAST(user_password as CHAR) as user_password FROM user_table WHERE user_email=?;",
+                sql:"SELECT * FROM user_table WHERE user_email=?;",
                 values: [userDTO.user_email]
             }, (err, results) => {
-                
+                console.log(results);
                 if(err){
                     return reject(err);
                 }
@@ -90,7 +91,7 @@ class MySQLUserService extends UserService {
         const getUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
 			/* maybe change this later*/ 
-                sql:"SELECT *, CAST(user_password as CHAR) as user_password FROM user_table WHERE user_id=?;",
+                sql:"SELECT * FROM user_table WHERE user_id=?;",
                 values: [userDTO.user_id]
             }, (err, results) => {
                 

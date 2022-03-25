@@ -33,10 +33,10 @@ async function authenticate(req, res, next){
     * @type {UserService}
     */
     const userService = ServiceLocator.getService(UserService.name);
-
+    console.log(req);
     try{
         const { payload: user, error } = await userService.getUserByEmail(req.body);
-
+        console.log(user);
         if(error) {
             res.status(400).json(error);
         } else {

@@ -69,9 +69,9 @@ const databaseSetup = async () => {
     try{
         const connection = require("mysql").createPool({
             connectionLimit : 100,
-            host: "localhost",
-            user:"root",
-            password:"password",
+            host: "learningapp.co7gje9anfj6.us-east-1.rds.amazonaws.com",
+            user:"admin",
+            password:"Password123!",
             database:"nerdjs"
         });
 
