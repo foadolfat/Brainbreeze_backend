@@ -1,14 +1,14 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
-/*
+
 drop table quizzes;
 drop table units; 
 drop table lessons;
 drop table modules;
 drop table classes;
 drop table user_table;
-*/
+
 
 create table user_table 
 (
