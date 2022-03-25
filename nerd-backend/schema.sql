@@ -1,12 +1,14 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
+/*
 drop table quizzes;
 drop table units; 
 drop table lessons;
 drop table modules;
 drop table classes;
 drop table user_table;
+*/
 
 create table user_table 
 (
@@ -14,7 +16,7 @@ create table user_table
     user_name VARCHAR(30) NOT NULL,
     user_email VARCHAR(50),
     unique(user_email),
-    user_password BINARY(60) NOT NULL,
+    user_password VARCHAR(150) NOT NULL,
     user_type VARCHAR(30)
 );
 create table classes
