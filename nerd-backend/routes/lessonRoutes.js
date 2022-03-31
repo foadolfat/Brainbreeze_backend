@@ -41,6 +41,8 @@ router
     *                 type: string
     *               lesson_index:
     *                 type: integer
+    *               instructor_id:
+    *                 type: integer
     *     responses:
     *       201:
     *         description: The lesson was added to the database

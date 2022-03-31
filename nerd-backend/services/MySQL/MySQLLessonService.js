@@ -22,7 +22,7 @@ class MySQLLessonService extends LessonService {
     async createLesson(lessonDTO) {
         const createLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO lessons ( lesson_name, lesson_index, lesson_descrip, module_id, instructor_id) VALUES(?,?,?,?);",
+                sql: "INSERT INTO lessons ( lesson_name, lesson_index, lesson_descrip, module_id, instructor_id) VALUES(?,?,?,?,?);",
                 values:[ lessonDTO.lesson_name, lessonDTO.lesson_index, lessonDTO.lesson_descrip, lessonDTO.module_id, lessonDTO.user_id]
             },
             (err, results) => {
@@ -88,7 +88,7 @@ class MySQLLessonService extends LessonService {
          */
         const getLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Lessons WHERE module_id=?;",
+                sql:"SELECT * FROM lessons WHERE module_id=?;",
                 values: [lessonDTO.module_id]
             }, (err, results) => {
                 
