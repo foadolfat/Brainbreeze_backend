@@ -140,6 +140,41 @@ class MySQLClassService extends ClassService {
         }
     }
 
+        /**
+     * @param {import("../ClassService").ClassDTO} classDTO
+     */
+         async getAllModulesAndLessonsByClassId(classDTO){
+            /**
+             * @type {Promise<import("../ClassService").Class>}
+             */
+            const getAllModulesAndLessonsByClassIdCMD = new Promise((resolve, reject) => {
+                this.connection.query({
+                    sql:"SELECT c.class_id, c.user_class, c.class_name, c.class_descrip, m.instructor_id, m.module_id, m.module_name, m.module_descrip, l.lesson_id, l.lesson_name, l.lesson_descrip, l.lesson_index from classes c, modules m, lessons l where c.class_id=? and c.class_id=m.class_id and m.module_id=l.module_id;",
+                    values: [classDTO.class_id]
+                }, (err, results) => {
+                    
+                    if(err){
+                        return reject(err);
+                    }
+    
+                    if(!results || results.length === 0){
+                        var err = new Error("Class does not exist!");
+                        err.errno = 1404;
+                        err.code = "NOT FOUND";
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+            try{
+                const modsAndClasses = await getAllModulesAndLessonsByClassIdCMD;
+                return new Result(modsAndClasses, null);
+    
+            } catch(e) {
+                return new Result(null, new IError(e.code, e.sqlMessage));
+            }
+        }
+
     /**
      * @param {import("../ClassService").ClassDTO} classDTO
      * @returns {Promise<Result<import("../ClassService").Class>>} 

@@ -100,6 +100,75 @@ router
 
     /**
     * @swagger
+    * /unit/findByLesson/{id}:
+    *   get:
+    *     tags:
+    *       - Unit
+    *     summary: retrieve all units by lesson id
+    *     description: retrieve all units by lesson id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: lesson id
+    *         required: true
+    *         type: integer
+    *     responses:
+    *       200:
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 unit_id:
+    *                   type: integer
+    *                 unit_name:
+    *                   type: string
+    *                 unit_content:
+    *                   type: string
+    *                 lesson_id:
+    *                   type: integer
+    *                 instructor_id:
+    *                   type: integer
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       500:
+    *         description: An internal error occured.
+    */
+     .get("/api/unit/findByLesson/:id", async(req, res) => {
+
+        /**
+         * @type {UnitService}
+         */
+        const unitService = ServiceLocator.getService(UnitService.name);
+        req.body.lesson_id = req.params.id;
+        try{
+            
+            const { payload: units, error } = await unitService.getUnitsByLessonId(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        units
+                    );
+            }
+        }catch(e){
+            console.log("an error occured in unitRoutes, get/unit");
+            res.status(500).end();
+        }
+
+    })
+    /**
+    * @swagger
     * /unit/{id}:
     *   get:
     *     tags:

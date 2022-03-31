@@ -178,6 +178,83 @@ router
     })
 
     /**
+
+    * @swagger
+    * /class/modulesAndLessons/{id}:
+    *   get:
+    *     tags:
+    *       - Class
+    *     summary: Get modules and lessons for a class
+    *     description: Get modules and lessons for a class
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: class id
+    *         required: true
+    *         type: string
+    *     responses:
+    *       200:
+    *         description: Successfully got modules and lessons
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 class_id:
+    *                   type: string
+    *                 user_class:
+    *                   type: string
+    *                 class_name:
+    *                   type: string
+    *                 class_descrip:
+    *                   type: string
+    *                 module_id:
+    *                   type: integer
+    *                 module_name:
+    *                   type: string
+    *                 module_descrip:
+    *                   type: string
+    *                 instructor_id:
+    *                   type: integer
+    *                 lesson_id:
+    *                   type: integer
+    *                 lesson_name:
+    *                   type: string
+    *                 lesson_descrip:
+    *                   type: string
+    *                 lesson_index:
+    *                   type: integer
+    *       400:
+    *         description: Bad Request
+    *       500:
+    *         description: An internal error occured.
+    */
+    .get("/api/class/modulesAndLessons/:id", async(req, res) => {
+        
+        /**
+         * @type {ClassService}
+         */
+        const classService = ServiceLocator.getService(ClassService.name);
+        req.body.class_id = req.params.id;
+        try{
+            const { payload: results, error } = await classService.getAllModulesAndLessonsByClassId(req.body);
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        results
+                    );
+            }
+        }catch(e){
+            console.log("an error occured in userRoutes, get/user");
+            res.status(500).end();
+        }
+
+    })
+
+    /**
     * @swagger
     * /class/findById/{id}:
     *   get:
