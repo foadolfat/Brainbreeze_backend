@@ -343,7 +343,6 @@ router
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.deleteUser(req.body);
