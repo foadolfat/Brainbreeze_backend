@@ -198,39 +198,37 @@ router
     *         content:
     *           application/json:
     *             schema:
-    *               type: object
-    *               properties:
-    *                 class_id:
-    *                   type: string
-    *                 user_class:
-    *                   type: string
-    *                 class_name:
-    *                   type: string
-    *                 class_descrip:
-    *                   type: string
-    *                 module_id:
-    *                   type: integer
-    *                 module_name:
-    *                   type: string
-    *                 module_descrip:
-    *                   type: string
-    *                 instructor_id:
-    *                   type: integer
-    *                 lesson_id:
-    *                   type: integer
-    *                 lesson_name:
-    *                   type: string
-    *                 lesson_descrip:
-    *                   type: string
-    *                 lesson_index:
-    *                   type: integer
+    *               type: array
+    *               items:
+    *                type: object
+    *                properties:
+    *                  module_id:
+    *                    type: integer
+    *                  module_name:
+    *                    type: string
+    *                  module_descrip:
+    *                    type: string
+    *                  instructor_id:
+    *                    type: integer
+    *                  lessons:
+    *                    type: array
+    *                    items:
+    *                      type: object
+    *                      properties:
+    *                        lesson_id:
+    *                          type: integer
+    *                        lesson_name:
+    *                          type: string
+    *                        lesson_descrip:
+    *                          type: string
+    *                        lesson_index:
+    *                          type: integer
     *       400:
     *         description: Bad Request
     *       500:
     *         description: An internal error occured.
     */
     .get("/api/class/modulesAndLessons/:id", async(req, res) => {
-        
         /**
          * @type {ClassService}
          */
@@ -241,14 +239,48 @@ router
             if(error) {
                 res.status(400).json(error);
             } else {
+                r = JSON.parse(JSON.stringify(results))
+                end_result = []
+                try{
+                    r.forEach(function(item, index) {
+                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)
+                        if(end_result_index!==-1) {
+                            end_result[end_result_index].lessons.push({
+                                lesson_id: item.lesson_id,
+                                lesson_name: item.lesson_name,
+                                lesson_descrip: item.lesson_descrip,
+                                lesson_index: item.lesson_index
+                            })
+                        } else {
+                            sub_obj = {
+                                module_id: item.module_id,
+                                module_name: item.module_name,
+                                module_descrip: item.module_descrip,
+                                instructor_id: item.instructor_id,
+                                lessons: [
+                                    {
+                                        lesson_id: item.lesson_id,
+                                        lesson_name: item.lesson_name,
+                                        lesson_descrip: item.lesson_descrip,
+                                        lesson_index: item.lesson_index
+                                    }
+                                ]
+                            }
+                            end_result.push(sub_obj)
+                        }
+                    })
+                }catch(e){
+                    console.log("An error occured in classRoutes, get/class/modulesAndLessons when parsing results");
+                    res.status(500).end();
+                }
                 res
                     .status(200)
                     .json(
-                        results
+                        end_result
                     );
             }
         }catch(e){
-            console.log("an error occured in userRoutes, get/user");
+            console.log("an error occured in userRoutes,/api/class/modulesAndLessons/:id ");
             res.status(500).end();
         }
 

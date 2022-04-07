@@ -50,7 +50,6 @@ class MySQLUserService extends UserService {
         /**
          * @type {Promise<import("../UserService").User>}
          */
-        console.log(userDTO);
         const getUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
 			/* maybe change this later*/ 
