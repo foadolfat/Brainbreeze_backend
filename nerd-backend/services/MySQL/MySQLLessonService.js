@@ -34,14 +34,71 @@ class MySQLLessonService extends LessonService {
         });
         try{
             const results = await createLessonCMD;
-            if(results.affectedRows>0) return new Result(true, null);
+            if(results.affectedRows>0) return this.getLastInsert();
             else return new Result(false, null);
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
         
     }
+    /**
+     * @param {import("../UnitService").UnitDTO} unitDTO
+     * @returns {Promise<Result<../LessonService>>}  
+     */
+    async getLessonId(unitDTO){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getModuleIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT * FROM lessons WHERE lesson_id=? and instructor_id=?;",
+                values: [unitDTO.lesson_id, unitDTO.instructor_id]
+            }, (err, results) => {
+                
+                if(err){
+                    return reject(err);
+                }
 
+                if(!results || results.length === 0){
+                    var err = new Error("Lesson does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results[0]);
+            });
+        });
+        try{
+            const id = await getModuleIdCMD;
+            return new Result(id, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+    /**
+     * @returns {Promise<Result<../LessonService>Module} 
+     */
+         async getLastInsert() {
+            const getLastInsertCMD = new Promise((resolve, reject) => {
+                this.connection.query({
+                    sql: "SELECT * FROM lessons WHERE lesson_id = (SELECT MAX(lesson_id) FROM lessons);"
+                },
+                (err, results) => {
+                    if(err) {
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+            try{
+                const results = await getLastInsertCMD;
+                return new Result(results, null);
+            } catch(e) {
+                return new Result(null, new IError(e.code, e.sqlMessage));
+            }
+            
+        }
     /**
      * @param {import("../LessonService").lessonDTO} lessonDTO
      * @returns {Promise<Result<import("../LessonService").lesson>>} 

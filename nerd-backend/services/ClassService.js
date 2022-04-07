@@ -92,7 +92,11 @@
      * @param {ClassDTO} classDTO
     **/
     async getAllModulesAndLessonsByClassId(classDTO) { }
- 
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Integer>>}
+    **/
+    async getInstructorId(classDTO) { }
 
  };
  

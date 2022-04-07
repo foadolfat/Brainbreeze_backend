@@ -17,7 +17,7 @@ class MySQLModuleService extends ModuleService {
 
     /**
      * @param {import("../ModuleService").ModuleDTO} moduleDTO
-     * @returns {Promise<Result<boolean>} 
+     * @returns {Promise<Result<../ModuleService>Module} 
      */
     async createModule(moduleDTO) {
         const createModuleCMD = new Promise((resolve, reject) => {
@@ -33,15 +33,72 @@ class MySQLModuleService extends ModuleService {
             });
         });
         try{
-            const results = await createModuleCMD;
-            if(results.affectedRows>0) return new Result(true, null);
+            const result = await createModuleCMD;
+            if(result.affectedRows>0) return this.getLastInsert();
             else return new Result(false, null);
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
         
     }
+        /**
+     * @returns {Promise<Result<../ModuleService>Module} 
+     */
+     async getLastInsert() {
+        const getLastInsertCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "SELECT * FROM modules WHERE module_id = (SELECT MAX(module_id) FROM modules);"
+            },
+            (err, results) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await getLastInsertCMD;
+            return new Result(results, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+        
+    }
+        /**
+     * @param {import("../LessonService").LessonDTO} lessonDTO
+     * @returns {Promise<Result<../ModuleService>>}  
+     */
+        async getModuleId(lessonDTO){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getModuleIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT * FROM modules WHERE module_id=? and instructor_id=?;",
+                values: [lessonDTO.module_id, lessonDTO.instructor_id]
+            }, (err, results) => {
+                
+                if(err){
+                    return reject(err);
+                }
 
+                if(!results || results.length === 0){
+                    var err = new Error("Module does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results[0]);
+            });
+        });
+        try{
+            const id = await getModuleIdCMD;
+            return new Result(id, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
     /**
      * @param {import("../ModuleService").ModuleDTO} moduleDTO
      * @returns {Promise<Result<import("../ModuleService").Module>>} 
