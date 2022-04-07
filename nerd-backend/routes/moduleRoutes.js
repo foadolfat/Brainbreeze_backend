@@ -5,10 +5,11 @@ const AuthService = require("../services/utility/AuthService");
 
 const ModuleService = require("../services/ModuleService");
 
+const utcStr = new Date().toUTCString();
 //module routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access module route Time: ', Date.now());
+        console.log('Access module route Time: ', utcStr);
         next();
     })
     /**
@@ -30,8 +31,10 @@ router
     *       content:
     *         application/json:
     *           schema:
-    *             type: object
-    *             properties:
+    *             type: array
+    *             items:
+    *              type: object
+    *              properties:
     *               module_name:
     *                 type: string
     *               module_descrip:
@@ -46,10 +49,22 @@ router
     *         content:
     *           application/json:
     *             schema:
-    *               type: object
     *               properties:
-    *                 message: 
-    *                   type: boolean
+    *                 result:
+    *                   type: array
+    *                   items:
+    *                     type: object
+    *                     properties:
+    *                       module_id:
+    *                         type: integer
+    *                       module_name:
+    *                         type: string
+    *                       module_descrip:
+    *                         type: string
+    *                       class_id:
+    *                         type: integer
+    *                       instructor_id:
+    *                         type: integer
     *       400:
     *         description: The module was not added to the database
     *       401:
@@ -64,7 +79,7 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .post("/api/module/create", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/module/create", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyClassExists, AuthService.verifyClassInstructor], async(req, res) => {
         /**
          * @type {ModuleService}
          */
@@ -75,13 +90,15 @@ router
                     .json({message: "unauthorized user type"});
             }
         try{
-            const { payload: message, error } = await moduleService.createModule(req.body);
+            const { payload: result, error } = await moduleService.createModule(req.body);
             if(error) {
                 res.status(400).json(error);
             } else {
                 res
                     .status(201)
-                    .json({message: message});
+                    .json({
+                        result
+                    });
             }
         }catch(e){
             console.log("An error occured in moduleRoutes, post/module");

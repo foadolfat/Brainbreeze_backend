@@ -5,10 +5,11 @@ const AuthService = require("../services/utility/AuthService");
 
 const QuizService = require("../services/QuizService");
 
+const utcStr = new Date().toUTCString();
 //quiz routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access quiz route Time: ', Date.now());
+        console.log('Access quiz route Time: ', utcStr);
         next();
     })
     /**
@@ -39,10 +40,12 @@ router
     *               quiz_type:
     *                 type: string
     *               quiz_content:
-    *                 type: string
+    *                 type: object
     *               quiz_answers:
-    *                 type: string
+    *                 type: object
     *               unit_id:
+    *                 type: integer
+    *               instructor_id:
     *                 type: integer
     *     responses:
     *       201:
@@ -50,10 +53,24 @@ router
     *         content:
     *           application/json:
     *             schema:
-    *               type: object
     *               properties:
-    *                 message: 
-    *                   type: boolean
+    *                 result:
+    *                   type: array
+    *                   items:
+    *                     type: object
+    *                     properties:
+    *                       quiz_name:
+    *                         type: string
+    *                       quiz_index:
+    *                         type: integer
+    *                       quiz_type:
+    *                         type: string
+    *                       quiz_content:
+    *                         type: object
+    *                       quiz_answers:
+    *                         type: object
+    *                       unit_id:
+    *                         type: integer
     *       400:
     *         description: Bad Request
     *         content:
@@ -77,20 +94,22 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/quiz", AuthService.verifyToken, async(req, res) => {
+    .post("/api/quiz/create", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
         /**
          * @type {QuizService}
          */
         const quizService = ServiceLocator.getService(QuizService.name);
 
         try{
-            const { payload: message, error } = await quizService.createQuiz(req.body);
+            const { payload: result, error } = await quizService.createQuiz(req.body);
             if(error) {
                 res.status(400).json(error);
             } else {
                 res
                     .status(201)
-                    .json({message: message});
+                    .json({
+                        result
+                    });
             }
         }catch(e){
             console.log("An error occured in quizRoutes, post/quiz");

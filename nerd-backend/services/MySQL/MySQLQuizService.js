@@ -17,13 +17,13 @@ class MySQLQuizService extends QuizService {
 
     /**
      * @param {import("../QuizService").quizDTO} quizDTO
-     * @returns {Promise<Result<boolean>} 
+     * @returns {Promise<Result<import("../QuizService").Quiz>>} 
      */
     async createQuiz(quizDTO) {
         const createQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO quizzes (quiz_index, quiz_name, quiz_type, quiz_content, quiz_answers, unit_id) VALUES(?,?,?,?,?,?);",
-                values:[quizDTO.quiz_index, quizDTO.quiz_name, quizDTO.quiz_type, quizDTO.quiz_content, quizDTO.quiz_answers, quizDTO.unit_id]
+                sql: "INSERT INTO quizzes (quiz_index, quiz_name, quiz_type, quiz_content, quiz_answers, unit_id, instructor_id) VALUES(?,?,?,?,?,?,?);",
+                values:[quizDTO.quiz_index, quizDTO.quiz_name, quizDTO.quiz_type, quizDTO.quiz_content, quizDTO.quiz_answers, quizDTO.unit_id, quizDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
@@ -34,13 +34,38 @@ class MySQLQuizService extends QuizService {
         });
         try{
             const results = await createQuizCMD;
-            if(results.affectedRows>0) return new Result(true, null);
+            if(results.affectedRows>0) return this.getLastInsert();
             else return new Result(false, null);
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
         
     }
+
+    /**
+     * @returns {Promise<Result<../QuizService>Quiz} 
+     */
+     async getLastInsert() {
+        const getLastInsertCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "SELECT * FROM quizzes WHERE quiz_id = (SELECT MAX(quiz_id) FROM quizzes);"
+            },
+            (err, results) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await getLastInsertCMD;
+            return new Result(results, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+        
+    }
+    
 
     /**
      * @param {import("../QuizService").quizDTO} quizDTO

@@ -5,10 +5,11 @@ const AuthService = require("../services/utility/AuthService");
 
 const ClassService = require("../services/ClassService");
 
+const utcStr = new Date().toUTCString();
 //class routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access class route Time: ', Date.now());
+        console.log('Access class route Time: ', utcStr);
         next();
     })
     /**
@@ -48,6 +49,15 @@ router
     *               properties:
     *                 message: 
     *                   type: boolean
+    *                   example: true
+    *                 class_id:
+    *                   type: string
+    *                 class_name:
+    *                   type: string
+    *                 class_descrip:
+    *                   type: string
+    *                 instructor_id:
+    *                   type: integer
     *       400:
     *         description: Bad Request
     *         content:
@@ -86,10 +96,18 @@ router
             const { payload: message, error } = await classService.createClass(req.body);
             if(error) {
                 res.status(400).json(error);
-            } else {
+            } else if(message!==true){
+                res.status(500).json(message);
+            }else {
                 res
                     .status(201)
-                    .json({message: message});
+                    .json({
+                        message: message,
+                        class_id: req.body.class_id,
+                        class_name: req.body.class_name,
+                        class_descrip: req.body.class_descrip,
+                        instructor_id: req.body.user_id
+                    });
             }
         }catch(e){
             console.log("An error occured in classRoutes, post/class");
