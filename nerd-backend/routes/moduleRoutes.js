@@ -31,10 +31,8 @@ router
     *       content:
     *         application/json:
     *           schema:
-    *             type: array
-    *             items:
-    *              type: object
-    *              properties:
+    *             type: object
+    *             properties:
     *               module_name:
     *                 type: string
     *               module_descrip:

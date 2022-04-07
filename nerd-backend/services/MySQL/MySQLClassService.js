@@ -72,50 +72,14 @@ class MySQLClassService extends ClassService {
      * @param {import("../ClassService").ClassDTO} classDTO
      * @returns {Promise<Result<Integer>>} 
      */
-         async getInstructorId(classDTO){
-            /**
-             * @type {Promise<import("../ClassService").Class>}
-             */
-            const getInstructorIdCMD = new Promise((resolve, reject) => {
-                this.connection.query({
-                    sql:"SELECT c.user_class as instructor_id from user_table u, classes c where c.class_id=? and u.user_id=c.user_class and u.user_type='instructor';",
-                    values: [classDTO.class_id]
-                }, (err, results) => {
-                    
-                    if(err){
-                        return reject(err);
-                    }
-    
-                    if(!results || results.length === 0){
-                        var err = new Error("Class does not exist!");
-                        err.errno = 1404;
-                        err.code = "NOT FOUND";
-                        return reject(err);
-                    }
-                    resolve(results[0]);
-                });
-            });
-            try{
-                const id = await getInstructorIdCMD;
-                return new Result(id, null);
-    
-            } catch(e) {
-                return new Result(null, new IError(e.code, e.sqlMessage));
-            }
-        }
-
-    /**
-     * @param {import("../ModuleService").ModuleDTO} moduleDTO
-     * @returns {Promise<Result<String>>} 
-     */
-     async getClassId(moduleDTO){
+    async getInstructorId(classDTO){
         /**
          * @type {Promise<import("../ClassService").Class>}
          */
-        const getClassIdCMD = new Promise((resolve, reject) => {
+        const getInstructorIdCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT class_id FROM classes WHERE class_id=?;",
-                values: [moduleDTO.class_id]
+                sql:"SELECT c.user_class as instructor_id from user_table u, classes c where c.class_id=? and u.user_id=c.user_class and u.user_type='instructor';",
+                values: [classDTO.class_id]
             }, (err, results) => {
                 
                 if(err){
@@ -132,8 +96,45 @@ class MySQLClassService extends ClassService {
             });
         });
         try{
-            const id = await getClassIdCMD;
+            const id = await getInstructorIdCMD;
             return new Result(id, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
+    /**
+     * @param {import("../ModuleService").ModuleDTO} moduleDTO
+     * @returns {Promise<Result<String>>} 
+     */
+     async getClassId(moduleDTO){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getClassIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT class_id FROM classes WHERE class_id=?;",
+                values: [moduleDTO.class_id]
+            }, (err, results) => {
+                
+                if(err){
+                    console.log(err);
+                    return reject(err);
+                }
+
+                if(!results || results.length === 0){
+                    var err = new Error("Class does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results[0]);
+            });
+        });
+        try{
+            const id = await getClassIdCMD;
+            return new Result(id.class_id, null);
 
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));

@@ -27,6 +27,7 @@ class MySQLModuleService extends ModuleService {
             },
             (err, results) => {
                 if(err) {
+                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -51,6 +52,7 @@ class MySQLModuleService extends ModuleService {
             },
             (err, results) => {
                 if(err) {
+                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
