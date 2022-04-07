@@ -16,7 +16,6 @@ async function verifyClassInstructor(req, res, next){
     * @type {ClassService}
     */
     const classService = ServiceLocator.getService(ClassService.name);
-
     try{
         const { payload: result, error } = await classService.getInstructorId(req.body);
 
@@ -42,14 +41,13 @@ async function verifyClassExists(req, res, next){
     * @type {ModuleService}
     */
      const classService = ServiceLocator.getService(ClassService.name);
-
      try{
          const { payload: result, error } = await classService.getClassId(req.body);
  
          if(error) {
              res.status(400).json(error);
          } else {
-            if(result.class_id == req.body.class_id) {
+            if(result == req.body.class_id) {
                 next();
             } else {
                 res.status(400).json({
@@ -167,10 +165,8 @@ async function authenticate(req, res, next){
     * @type {UserService}
     */
     const userService = ServiceLocator.getService(UserService.name);
-    console.log(req);
     try{
         const { payload: user, error } = await userService.getUserByEmail(req.body);
-        console.log(user);
         if(error) {
             res.status(400).json(error);
         } else {
