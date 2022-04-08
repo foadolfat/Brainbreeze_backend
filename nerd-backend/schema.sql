@@ -71,10 +71,6 @@ create table scores
 (
   user_id BIGINT NOT NULL REFERENCES user_table(user_id),
   quiz_id INT NOT NULL REFERENCES quizzes(quiz_id),
-  class_id CHAR(36) NOT NULL REFERENCES classes(class_id),
-  lesson_id INT NOT NULL REFERENCES lessons(lesson_id),
-  module_id INT NOT NULL REFERENCES modules(module_id),
-  unit_id INT NOT NULL REFERENCES units(unit_id),
   instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
   score_id SERIAL PRIMARY KEY,
   score INT,
