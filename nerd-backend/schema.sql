@@ -82,41 +82,15 @@ create table scores
   date_regraded TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   unique key score_key (user_id, quiz_id, class_id, lesson_id, module_id, score_id, unit_id, instructor_id)
 );
-create table unit_progress
+create table progress
 (
   user_id BIGINT NOT NULL REFERENCES user_table(user_id),
   unit_id INT NOT NULL REFERENCES units(unit_id),
-  completed BOOLEAN DEFAULT FALSE,
-  date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  unique key progress_key (user_id, unit_id, lesson_id)
-);
-create table lesson_progress
-(
-  user_id BIGINT NOT NULL REFERENCES user_table(user_id),
+  class_id CHAR(36) NOT NULL REFERENCES classes(class_id),
   lesson_id INT NOT NULL REFERENCES lessons(lesson_id),
-  completed BOOLEAN DEFAULT FALSE,
-  total_units INT,
-  units_completed INT,
-  date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  unique key progress_key (user_id, lesson_id)
-);
-create table module_progress
-(
-  user_id BIGINT NOT NULL REFERENCES user_table(user_id),
   module_id INT NOT NULL REFERENCES modules(module_id),
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
   completed BOOLEAN DEFAULT FALSE,
-  total_lessons INT,
-  lessons_completed INT,
   date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  unique key progress_key (user_id, module_id)
-);
-create table class_progress
-(
-  user_id BIGINT NOT NULL REFERENCES user_table(user_id),
-  class_id INT NOT NULL REFERENCES classes(class_id),
-  completed BOOLEAN DEFAULT FALSE,
-  total_modules INT,
-  modules_completed INT,
-  date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  unique key progress_key (user_id, class_id)
+  unique key progress_key (user_id, unit_id, lesson_id, module_id, class_id, instructor_id)
 );
