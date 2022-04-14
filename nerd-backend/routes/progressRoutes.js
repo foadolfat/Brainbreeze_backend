@@ -125,6 +125,84 @@ router
         
         
     })
+        /**
+    * @swagger
+    * /progress/findByUnit/{unit_id}/{user_id}:
+    *   get:
+    *     tags:
+    *       - Progress
+    *     summary: get progress for unit by user and unit id
+    *     description: get unit progress by providing unit id and user id
+    *     parameters:
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *       - in: path
+    *         name: unit_id
+    *         required: true
+    *         description: id of the unit to get the progress for
+    *         type: integer
+    *       - in: path
+    *         name: user_id
+    *         required: true
+    *         description: id of the user to get the progress for
+    *         type: integer
+    *     responses:
+    *       201:
+    *         description: The Progress was added to the database
+    *         content:
+    *           application/json:
+    *             schema:
+    *               properties:
+    *                 AllUnits:
+    *                   type: array
+    *                   items:
+    *                     type: object
+    *                     properties:
+    *                       user_id:
+    *                         type: integer
+    *                       unit_id:
+    *                         type: integer
+    *                       completed:
+    *                         type: boolean
+    *       400:
+    *         description: The Progress was not found in the database
+    *       401:
+    *         description: The user is not authorized to view progress
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       500:
+    *         description: An internal error occured
+    */
+    .get("/api/progress/findByUnit/:unit_id/:user_id", [AuthService.verifyToken], async(req, res) => {
+        /**
+         * @type {ProgressService}
+        */
+        const progressService = ServiceLocator.getService(ProgressService.name);
+        try{
+            const { payload: result, error } = await progressService.getProgress(req.params);
+            if(error) {
+                res.status(400).json("get progress broke..."+error.message);
+            } else {
+                res
+                    .status(201)
+                    .json({
+                        result
+                    });
+            }
+        }
+        catch(e) {
+            console.log("an error occured in progressRoutes, get/api/progress/findByUnit/:unit_id/:user_id", e);
+            res.status(500).end();
+        }
+    })
     /**
     * @swagger
     * /progress/findByLessonAndUser/{lesson_id}/{user_id}:

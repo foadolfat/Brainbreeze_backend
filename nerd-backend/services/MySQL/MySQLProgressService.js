@@ -127,8 +127,8 @@ class MySQLProgressService extends ProgressService {
     async getProgress(progressDTO) {
         const getProgressCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "SELECT * FROM progress WHERE user_id = ? AND unit_id = ? AND instructor_id = ?",
-                values:[progressDTO.user_id, progressDTO.unit_id, progressDTO.instructor_id]
+                sql: "SELECT * FROM progress WHERE user_id = ? AND unit_id = ?",
+                values:[progressDTO.user_id, progressDTO.unit_id]
             },
             (err, results) => {
                 if(err) {
