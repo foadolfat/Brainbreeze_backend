@@ -7,6 +7,7 @@ const MySQLModuleService = require("./services/MySQL/MySQLModuleService");
 const MySQLLessonService = require("./services/MySQL/MySQLLessonService");
 const MySQLUnitService = require("./services/MySQL/MySQLUnitService");
 const MySQLQuizService = require("./services/MySQL/MySQLQuizService");
+const MySQLProgressService = require("./services/MySQL/MySQLProgressService");
 
 const UserService = require("./services/UserService");
 const ClassService = require("./services/ClassService");
@@ -14,6 +15,7 @@ const LessonService = require("./services/LessonService");
 const ModuleService = require("./services/ModuleService");
 const UnitService = require("./services/UnitService");
 const QuizService = require("./services/QuizService");
+const ProgressService = require("./services/ProgressService");
 
 const app = express();
 app.use(require('cors')());
@@ -27,6 +29,7 @@ app.use(require(`./routes/moduleRoutes`));
 app.use(require(`./routes/unitRoutes`));
 app.use(require(`./routes/lessonRoutes`));
 app.use(require(`./routes/quizRoutes`));
+app.use(require(`./routes/progressRoutes`));
 
 const swaggerJSDoc = require('swagger-jsdoc');
 
@@ -74,6 +77,13 @@ const databaseSetup = async () => {
             password:"Password123!",
             database:"nerdjs"
         });
+        // const connection = require("mysql").createPool({
+        //   connectionLimit : 100,
+        //   host: "localhost",
+        //   user:"root",
+        //   password:"password",
+        //   database:"nerdjs"
+        // });
 
         
         const userService = new MySQLUserService(connection);
@@ -82,6 +92,7 @@ const databaseSetup = async () => {
         const moduleService = new MySQLModuleService(connection);
         const unitService = new MySQLUnitService(connection);
         const quizService = new MySQLQuizService(connection);
+        const progressService = new MySQLProgressService(connection);
 
         await userService.init();
         await classService.init();
@@ -96,6 +107,7 @@ const databaseSetup = async () => {
         ServiceLocator.setService(LessonService.name, lessonService);
         ServiceLocator.setService(UnitService.name, unitService);
         ServiceLocator.setService(QuizService.name, quizService);
+        ServiceLocator.setService(ProgressService.name, progressService);
 
         console.log("UserService initialized");
         console.log("ClassService initialized");
@@ -103,6 +115,7 @@ const databaseSetup = async () => {
         console.log("LessonService initialized");
         console.log("UnitService initialized");
         console.log("QuizService initialized");
+        console.log("ProgressService initialized");
         console.log("Database set up complete");
     } catch(e){
         console.log(e);

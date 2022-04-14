@@ -36,6 +36,32 @@ async function verifyClassInstructor(req, res, next){
          res.status(500).end();
      }
 };
+
+async function getClassByUserIdAndClassId(req, res, next){
+    /**
+    * @type {ClassService}
+    */
+     const classService = ServiceLocator.getService(ClassService.name);
+     try{
+         const { payload: result, error } = await classService.getClassByUserIdAndClassId(req.body);
+ 
+         if(error) {
+             res.status(400).json("something's fishy..."+error.message);
+         } else {
+            if(result) {
+                next();
+            } else {
+                res.status(400).json({
+                    error: "Something went wrong. User is not signed up for that class."
+                });
+            }
+         }
+      }catch(e){
+          console.log("an error occured");
+          res.status(500).end();
+      }
+ };
+
 async function verifyClassExists(req, res, next){
     /**
     * @type {ModuleService}
@@ -241,5 +267,6 @@ module.exports = {
     verifyClassExists : verifyClassExists,
     verifyModuleAccess : verifyModuleAccess,
     verifyLessonAccess : verifyLessonAccess,
-    verifyUnitAccess : verifyUnitAccess
+    verifyUnitAccess : verifyUnitAccess,
+    getClassByUserIdAndClassId : getClassByUserIdAndClassId,
 }

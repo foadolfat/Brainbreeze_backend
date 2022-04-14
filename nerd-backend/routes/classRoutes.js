@@ -132,7 +132,7 @@ router
     *         required: true
     *         type: string
     *       - in: path
-    *         name: class_id
+    *         name: id
     *         description: class id
     *         required: true
     *         type: string

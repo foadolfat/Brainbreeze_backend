@@ -208,7 +208,7 @@ class MySQLModuleService extends ModuleService {
     async deleteModule(moduleDTO) {
         const deleteModuleCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM modules WHERE module_id=?; and instructor_id=?;",
+                sql: "DELETE FROM modules WHERE module_id=? and instructor_id=?;",
                 values:[moduleDTO.module_id, moduleDTO.user_id]
             },
             (err, results) => {
