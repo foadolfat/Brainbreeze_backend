@@ -136,6 +136,115 @@ class MySQLUnitService extends UnitService {
         }
     }
 
+        /**
+     * @param {import("../UnitService").unitDTO} unitDTO
+     * @returns {Promise<Result<import("../UnitService").unit>>} 
+     */
+     async getUnitsByLessonIdForProgress(unitDTO){
+        /**
+         * @type {Promise<import("../UnitService").unit>}
+         */
+        const getUnitsByLessonIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT unit_id, lesson_id FROM units WHERE lesson_id=?;",
+                values: [unitDTO.lesson_id]
+            }, (err, results) => {
+                
+                if(err){
+                    return reject(err);
+                }
+
+                if(!results || results.length === 0){
+                    var err = new Error("lesson does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const newunit = await getUnitsByLessonIdCMD;
+            return new Result(newunit, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
+    /**
+     * @param {import("../UnitService").unitDTO} unitDTO
+     * @returns {Promise<Result<import("../UnitService").unit>>} 
+     */
+     async getUnitsByModuleIdForProgress(unitDTO){
+        /**
+         * @type {Promise<import("../UnitService").unit>}
+         */
+        const getUnitsByModuleIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT unit_id, module_id FROM module_units WHERE module_id=?;",
+                values: [unitDTO.module_id]
+            }, (err, results) => {
+                
+                if(err){
+                    return reject(err);
+                }
+
+                if(!results || results.length === 0){
+                    var err = new Error("module does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const newunit = await getUnitsByModuleIdCMD;
+            return new Result(newunit, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
+    /**
+     * @param {import("../UnitService").unitDTO} unitDTO
+     * @returns {Promise<Result<import("../UnitService").unit>>} 
+     */
+     async getUnitsByClassIdForProgress(unitDTO){
+        /**
+         * @type {Promise<import("../UnitService").unit>}
+         */
+        const getUnitsByClassIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT unit_id, class_id FROM class_units WHERE class_id=?;",
+                values: [unitDTO.class_id]
+            }, (err, results) => {
+                
+                if(err){
+                    console.log(err);
+                    return reject(err);
+                }
+
+                if(!results || results.length === 0){
+                    var err = new Error("class does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const newunit = await getUnitsByClassIdCMD;
+            return new Result(newunit, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
     /**
      * @param {import("../UnitService").unitDTO} unitDTO
      * @returns {Promise<Result<import("../UnitService").unit>>} 

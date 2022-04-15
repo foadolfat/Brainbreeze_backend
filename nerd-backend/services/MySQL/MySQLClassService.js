@@ -146,6 +146,7 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<import("../ClassService").Class>>} 
      */
     async getClassById(classDTO){
+        console.log(classDTO.class_id);
         /**
          * @type {Promise<import("../ClassService").Class>}
          */
@@ -162,7 +163,7 @@ class MySQLClassService extends ClassService {
                 if(!results || results.length === 0){
                     var err = new Error("Class does not exist!");
                     err.errno = 1404;
-                    err.code = "NOT FOUND";
+                    err.code = "CLASS NOT FOUND";
                     return reject(err);
                 }
                 resolve(results[0]);
@@ -247,6 +248,48 @@ class MySQLClassService extends ClassService {
                 return new Result(null, new IError(e.code, e.sqlMessage));
             }
         }
+    
+    /**
+     * @param {import("../ClassService").ClassDTO} classDTO
+     * @returns {Promise<Result<boolean>>}
+     */
+    async getClassByUserIdAndClassId(classDTO){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getClassByUserIdAndClassIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT * from classes where user_class=? and class_id=?;",
+                values: [classDTO.user_id, classDTO.class_id]
+            }, (err, results) => {
+                
+                if(err){
+                    return reject(err);
+                }
+
+                if(!results || results.length === 0){
+                    var err = new Error("Class does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const classes = await getClassByUserIdAndClassIdCMD;
+            if(classes.length > 0){
+                return new Result(true, null);
+            } else {
+                return new Result(false, null);
+            }
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
+
 
     /**
      * @param {import("../ClassService").ClassDTO} classDTO

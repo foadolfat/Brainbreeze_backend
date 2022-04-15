@@ -109,7 +109,7 @@ class MySQLLessonService extends LessonService {
          */
         const getLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Lessons WHERE lesson_id=?;",
+                sql:"SELECT * FROM lessons WHERE lesson_id=?;",
                 values: [lessonDTO.lesson_id]
             }, (err, results) => {
                 
