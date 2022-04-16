@@ -317,7 +317,7 @@ class MySQLUnitService extends UnitService {
     async deleteUnit(unitDTO) {
         const deleteUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM Units WHERE unit_id=?;",
+                sql: "DELETE FROM units WHERE unit_id=?;",
                 values:[unitDTO.unit_id]
             },
             (err, results) => {
