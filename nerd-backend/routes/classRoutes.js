@@ -87,6 +87,7 @@ router
          */
         const classService = ServiceLocator.getService(ClassService.name);
         req.body.class_id = req.id;
+        req.body.instructor_id = req.body.user_id;
         if(req.user_type != "instructor") {
                 res
                     .status(401)

@@ -20,10 +20,11 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<boolean>} 
      */
     async createClass(classDTO) {
+        console.log(classDTO);
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO classes (class_id, class_name, class_descrip, user_class) VALUES(?,?,?,?);",
-                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id]
+                sql: "INSERT INTO classes (class_id, class_name, class_descrip, user_class, instructor_id) VALUES(?,?,?,?,?);",
+                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id, classDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
