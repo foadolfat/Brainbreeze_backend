@@ -344,7 +344,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    get("/api/class/findById/:id", async(req, res) => {
+    .get("/api/class/findById/:id", async(req, res) => {
 
         /**
          * @type {ClassService}
