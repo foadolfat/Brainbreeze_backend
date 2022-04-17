@@ -1,6 +1,8 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
+drop table progress;
+drop table scores;
 drop table quizdata;
 drop table quizzes;
 drop table units; 
@@ -8,10 +10,9 @@ drop table lessons;
 drop table modules;
 drop table classes;
 drop table user_table;
-drop table progress;
 drop view class_units;
 drop view module_units;
-drop table progression_creation;
+drop view progression_creation;
 
 
 create table user_table 
@@ -94,6 +95,10 @@ create table scores
 	user_id BIGINT NOT NULL REFERENCES user_table(user_id),
 	quiz_id INT NOT NULL REFERENCES quizzes(quiz_id),
 	instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
+    class_id BIGINT NOT NULL REFERENCES classes_table(class_id),
+    lesson_id BIGINT NOT NULL REFERENCES lessons_table(lesson_id),
+    module_id BIGINT NOT NULL REFERENCES modules(module_id),
+    unit_id BIGINT NOT NULL REFERENCES units_table(unit_id),
 	score_id SERIAL PRIMARY KEY,
 	score INT,
 	date_graded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
