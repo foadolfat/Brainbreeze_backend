@@ -70,20 +70,20 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 const databaseSetup = async () => {
     
     try{
+//         const connection = require("mysql").createPool({
+//             connectionLimit : 100,
+//             host: "learningapp.co7gje9anfj6.us-east-1.rds.amazonaws.com",
+//             user:"admin",
+//             password:"Password123!",
+//             database:"nerdjs"
+//         });
         const connection = require("mysql").createPool({
-            connectionLimit : 100,
-            host: "learningapp.co7gje9anfj6.us-east-1.rds.amazonaws.com",
-            user:"admin",
-            password:"Password123!",
-            database:"nerdjs"
+          connectionLimit : 100,
+          host: "localhost",
+          user:"root",
+          password:"Password123!",
+          database:"nerdjs"
         });
-        // const connection = require("mysql").createPool({
-        //   connectionLimit : 100,
-        //   host: "localhost",
-        //   user:"root",
-        //   password:"password",
-        //   database:"nerdjs"
-        // });
 
         
         const userService = new MySQLUserService(connection);
