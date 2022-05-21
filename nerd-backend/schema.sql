@@ -1,18 +1,18 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
-drop table progress;
-drop table scores;
-drop table quizdata;
-drop table quizzes;
-drop table units; 
-drop table lessons;
-drop table modules;
-drop table classes;
-drop table user_table;
-drop view class_units;
-drop view module_units;
-drop view progression_creation;
+drop table if exists progress;
+drop table if exists scores;
+drop table if exists quizdata;
+drop table if exists quizzes;
+drop table if exists units; 
+drop table if exists lessons;
+drop table if exists modules;
+drop table if exists classes;
+drop table if exists user_table;
+drop view if exists class_units;
+drop view if exists module_units;
+drop view if exists progression_creation;
 
 
 create table user_table 
